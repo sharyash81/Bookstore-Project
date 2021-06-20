@@ -1,0 +1,15 @@
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\WPF Project - Bookstore.exe.config
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\WPF Project - Bookstore.exe
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\WPF Project - Bookstore.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csprojAssemblyReference.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\MainWindow.g.cs
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\App.g.cs
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.lref
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\MainWindow.baml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.g.resources
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF_Project___Bookstore.Properties.Resources.resources
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csproj.GenerateResource.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csproj.CoreCompileInputs.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.exe
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.pdb
