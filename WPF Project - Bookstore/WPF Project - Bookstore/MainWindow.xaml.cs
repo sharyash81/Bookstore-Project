@@ -34,8 +34,10 @@ namespace WPF_Project___Bookstore
         Employee TempEmployee;
         Member TempMember;
         Book TempBook;
+        int TempDeposit;
         public List<string> RemoveEmployees = new List<string>();
         public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
+        public ObservableCollection<Member> Members { get; set; } = new ObservableCollection<Member>();
         public ObservableCollection<Book> Books { get; set; } = new ObservableCollection<Book>();
         public MainWindow()
         {
@@ -48,7 +50,7 @@ namespace WPF_Project___Bookstore
         }
 
         //Database Functions
-        private Types usernameAvailableAndMatch(string u,string p)
+        private Types usernameAvailableAndMatch(string u, string p)
         {
             bool flagexist = false;
             bool flagmatch = false;
@@ -217,13 +219,13 @@ namespace WPF_Project___Bookstore
         }
         private bool CardNumberRegex(string name)
         {
-            if(name.Length != 16)
+            if (name.Length != 16)
             {
                 return false;
             }
             int[] digits = new int[16];
             int sum = 0;
-            for(int i = 0; i < 16; i+=2)
+            for (int i = 0; i < 16; i += 2)
             {
                 sum += (int.Parse(name[i].ToString()) * 2) % 10;
                 sum += (int)((int.Parse(name[i].ToString()) * 2) / 10);
@@ -235,7 +237,7 @@ namespace WPF_Project___Bookstore
             }
             return true;
         }
-        private bool MonthRegex(string year,string month)
+        private bool MonthRegex(string year, string month)
         {
             try
             {
@@ -259,7 +261,7 @@ namespace WPF_Project___Bookstore
         }
 
 
-        // login page : 
+        // login page :
         private void Login_SignIn_Button_Click(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -306,9 +308,10 @@ namespace WPF_Project___Bookstore
                             Bindi_Books.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
                             DataContext = this;
+                            Manager_Balance.Text = "Balance : " + TempManager.Balance + " T";
                             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Main_Menu_Page));
 
-                            Manager_Balance.Text = "Balance : " + TempManager.Balance + " T";
+                            
                             break;
                         case Types.Employee:
                             Access = Types.Employee;
@@ -319,6 +322,32 @@ namespace WPF_Project___Bookstore
                             }
                             LoginUsernameBox.Text = "";
                             LoginPasswordBox.Password = "";
+
+
+                            Members = TempEmployee.getUnreturned();
+                            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+                            DataContext = this;
+                            Employee_Balance.Text = "Balance : " + TempEmployee.Balance + " T";
+
+
+
+
+
+
+                            EmployeeEditUsernameBox.Text = TempEmployee.Username;
+                            EmployeeEditEmailBox.Text = TempEmployee.Email;
+                            EmployeeEditPhoneNumberBox.Text = TempEmployee.Phone_Number;
+                            EmployeeEditPasswordBox.Password = "";
+
+
+
+
+
+
+
+
+
+
                             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
                             break;
                         case Types.Member:
@@ -330,6 +359,17 @@ namespace WPF_Project___Bookstore
                             }
                             LoginUsernameBox.Text = "";
                             LoginPasswordBox.Password = "";
+
+
+
+
+                            MemberEditUsernameBox.Text = TempMember.Username;
+                            MemberEditEmailBox.Text = TempMember.Email;
+                            MemberEditPhoneNumberBox.Text = TempMember.Phone_Number;
+                            MemberEditPasswordBox.Password = "";
+                            Member_Balance.Text = "Balance : " + TempMember.Balance + " T";
+
+
                             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
                             break;
                         case Types.NotFound:
@@ -351,7 +391,7 @@ namespace WPF_Project___Bookstore
                     }
                 }
             }
-            catch(Exception ee)
+            catch (Exception ee)
             {
                 Login_Usarname_Alert.Text = ee.Message;
             }
@@ -426,7 +466,7 @@ namespace WPF_Project___Bookstore
                 }
                 else
                 {
-                    Register_PhoneNumber_Alert.Text = "Password has already taken!";
+                    Register_PhoneNumber_Alert.Text = "Phone Number has already taken!";
                     flag = false;
                 }
             }
@@ -523,7 +563,29 @@ namespace WPF_Project___Bookstore
                 YearBox.Text = "";
                 if (Access == Types.Admin)
                 {
-                    //TempManager
+                    SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+                    conn.Open();
+                    string command = "update users SET balance = '" + (TempManager.Balance + TempDeposit) + "' where username = '" + TempManager.Username + "'";
+                    SqlCommand comm = new SqlCommand(command, conn);
+                    comm.ExecuteNonQuery();
+                    conn.Close();
+                    TempManager.Balance += TempDeposit;
+                    TempDeposit = 0;
+                    Manager_Balance.Text = "Balance : " + TempManager.Balance + " T";
+                    Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Bank_Account_Section_Page));
+                }
+                if (Access == Types.Member)
+                {
+                    SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+                    conn.Open();
+                    string command = "update users SET balance = '" + (TempMember.Balance + TempDeposit) + "' where username = '" + TempMember.Username + "'";
+                    SqlCommand comm = new SqlCommand(command, conn);
+                    comm.ExecuteNonQuery();
+                    conn.Close();
+                    TempMember.Balance += TempDeposit;
+                    TempDeposit = 0;
+                    Member_Balance.Text = "Balance : " + TempMember.Balance + " T";
+                    Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Bank_Account_Section_Page));
                 }
                 if (Access == Types.NotFound)
                 {
@@ -549,7 +611,18 @@ namespace WPF_Project___Bookstore
             CVV2Box.Text = "";
             monthBox.Text = "";
             YearBox.Text = "";
-            Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Register_Page));
+            if (Access == Types.Admin)
+            {
+                Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Bank_Account_Section_Page));
+            }
+            if (Access == Types.Member)
+            {
+                Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Bank_Account_Section_Page));
+            }
+            if (Access == Types.NotFound)
+            {
+                Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Register_Page));
+            }
         }
 
 
@@ -587,16 +660,49 @@ namespace WPF_Project___Bookstore
             Employees = TempManager.getEmployees();
             RemoveEmployees = new List<string>();
             Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            PayEmployeeButton.Visibility = Visibility.Visible;
+            SubmitEmployeePay.Visibility = Visibility.Hidden;
+            SubmitEmployeePayRect.Visibility = Visibility.Hidden;
+            Alert_Employee_Pay.Text = "";
+            PayEmployeePasswordBox.Password = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Add_Employee_Menu_Page));
         }
 
         private void Manager_EmployeeSection_ListSection_PayButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            PayEmployeeButton.Visibility = Visibility.Hidden;
+            SubmitEmployeePay.Visibility = Visibility.Visible;
+            SubmitEmployeePayRect.Visibility = Visibility.Visible;
         }
         private void Employees_Sumbmit_Pay_Click(object sender, RoutedEventArgs e)
         {
+            if (TempManager.Password == PayEmployeePasswordBox.Password)
+            {
+                if (TempManager.payEmployee())
+                {
+                    Alert_Employee_Pay.Foreground = Brushes.Green;
+                    Alert_Employee_Pay.Text = "Employee salaries were paid.";
+                    PayEmployeeButton.Visibility = Visibility.Visible;
+                    SubmitEmployeePay.Visibility = Visibility.Hidden;
+                    SubmitEmployeePayRect.Visibility = Visibility.Hidden;
+                    PayEmployeePasswordBox.Password = "";
+                }
+                else
+                {
+                    Alert_Employee_Pay.Foreground = Brushes.Red;
+                    Alert_Employee_Pay.Text = "We don't have enough budget!";
+                    PayEmployeeButton.Visibility = Visibility.Visible;
+                    SubmitEmployeePay.Visibility = Visibility.Hidden;
+                    SubmitEmployeePayRect.Visibility = Visibility.Hidden;
+                    PayEmployeePasswordBox.Password = "";
+                }
+            }
 
+            else
+            {
+                Alert_Employee_Pay.Foreground = Brushes.Red;
+                Alert_Employee_Pay.Text = "Password is wrong!";
+            }
         }
         private void Manager_EmployeeSection_ListSection_Back_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -604,6 +710,11 @@ namespace WPF_Project___Bookstore
             Employees = TempManager.getEmployees();
             RemoveEmployees = new List<string>();
             Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            PayEmployeeButton.Visibility = Visibility.Visible;
+            SubmitEmployeePay.Visibility = Visibility.Hidden;
+            SubmitEmployeePayRect.Visibility = Visibility.Hidden;
+            Alert_Employee_Pay.Text = "";
+            PayEmployeePasswordBox.Password = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Main_Menu_Page));
         }
         private void Remove_Employee_Click(object sender, RoutedEventArgs e)
@@ -627,7 +738,7 @@ namespace WPF_Project___Bookstore
                     Remove_All_Selected_Employee_Button.Visibility = Visibility.Hidden;
                 }
             }
-            
+
         }
         private void Remove_Employee_Click2(object sender, RoutedEventArgs e)
         {
@@ -671,10 +782,22 @@ namespace WPF_Project___Bookstore
         // manager bank acconut section :
         private void Manager_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Payment_Page));
+            try
+            {
+                TempDeposit = int.Parse(Manager_BankAccount_BankBalance_Deposit.Text);
+                Manager_BankAccount_Alert.Text = "";
+                Manager_BankAccount_BankBalance_Deposit.Text = "";
+                Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Payment_Page));
+            }
+            catch (Exception)
+            {
+                Manager_BankAccount_Alert.Text = "Please enter the value in the correct format!";
+            }
         }
         private void Manager_BankAccountSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            Manager_BankAccount_Alert.Text = "";
+            Manager_BankAccount_BankBalance_Deposit.Text = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Main_Menu_Page));
         }
 
@@ -685,29 +808,97 @@ namespace WPF_Project___Bookstore
 
 
         // Manager Add Employee Section :
-        private void AddEmployees_PrintNoBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-        private void AddEmployees_BookNameBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-        private void AddEmployees_GenreBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-        private void AddEmployees_AuthorBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
 
         private void AddEmployees_AddButton_Click(object sender, RoutedEventArgs e)
         {
-
+            bool flag = true;
+            if (UserNameRegex(AddEmployee_Username.Text))
+            {
+                if (usernameNotTaken(AddEmployee_Username.Text))
+                {
+                    AddEmployee_Usarname_Alert.Text = "";
+                }
+                else
+                {
+                    AddEmployee_Usarname_Alert.Text = "Username has already taken!";
+                    flag = false;
+                }
+            }
+            else
+            {
+                AddEmployee_Usarname_Alert.Text = "Username does not have the correct format!";
+                flag = false;
+            }
+            if (EmailRegex(AddEmployeeEmailBox.Text))
+            {
+                if (emailNotTaken(AddEmployeeEmailBox.Text))
+                {
+                    AddEmployee_Email_Alert.Text = "";
+                }
+                else
+                {
+                    AddEmployee_Email_Alert.Text = "Email has already taken!";
+                    flag = false;
+                }
+            }
+            else
+            {
+                AddEmployee_Email_Alert.Text = "Email does not have the correct format!";
+                flag = false;
+            }
+            if (PhoneNumberRegex(AddEmployeePhoneNumberBox.Text))
+            {
+                if (phoneNumberNotTaken(AddEmployeePhoneNumberBox.Text))
+                {
+                    AddEmployee_PhoneNumber_Alert.Text = "";
+                }
+                else
+                {
+                    AddEmployee_PhoneNumber_Alert.Text = "Password has already taken!";
+                    flag = false;
+                }
+            }
+            else
+            {
+                AddEmployee_PhoneNumber_Alert.Text = "Phone Number does not have the correct format!";
+                flag = false;
+            }
+            if (PasswordRegex(AddEmployeePasswordBox.Password))
+            {
+                AddEmployee_Password_Alert.Text = "";
+            }
+            else
+            {
+                AddEmployee_Password_Alert.Foreground = Brushes.Red;
+                AddEmployee_Password_Alert.Text = "Password does not have the correct format!";
+                flag = false;
+            }
+            if (flag)
+            {
+                TempEmployee = new Employee(AddEmployee_Username.Text.ToLower(), AddEmployeeEmailBox.Text.ToLower(), AddEmployeePhoneNumberBox.Text, AddEmployeePasswordBox.Password, "employee", 0);
+                TempEmployee.fillDatabase();
+                TempEmployee = null;
+                Employees = TempManager.getEmployees();
+                Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+                DataContext = this;
+                AddEmployee_Username.Text = "";
+                AddEmployeeEmailBox.Text = "";
+                AddEmployeePhoneNumberBox.Text = "";
+                AddEmployeePasswordBox.Password = "";
+                AddEmployee_Password_Alert.Foreground = Brushes.Green;
+                AddEmployee_Password_Alert.Text = "Employee Added.";
+            }
         }
         private void AddEmployees_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            AddEmployee_Usarname_Alert.Text = "";
+            AddEmployee_Email_Alert.Text = "";
+            AddEmployee_PhoneNumber_Alert.Text = "";
+            AddEmployee_Password_Alert.Text = "";
+            AddEmployee_Username.Text = "";
+            AddEmployeeEmailBox.Text = "";
+            AddEmployeePhoneNumberBox.Text = "";
+            AddEmployeePasswordBox.Password = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Employee_Section_List_Page));
         }
 
@@ -826,17 +1017,72 @@ namespace WPF_Project___Bookstore
 
 
         //Employee Member Section :
-        private void Employee_MembersSection_ListSection_AddButton_Click(object sender, RoutedEventArgs e)
+        private void Employee_All_Members(object sender, RoutedEventArgs e)
         {
-
+            MembList.Text = "All";
+            Members = TempEmployee.getAllMembers();
+            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
         }
-
-        private void Employee_MembersSection_ListSection_PayButton_Click(object sender, RoutedEventArgs e)
+        private void Employee_Expired_License_Members(object sender, RoutedEventArgs e)
         {
-
+            MembList.Text = "Expired License";
+            Members = TempEmployee.getExpiredLicense();
+            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+        }
+        private void Employee_Unreturned_Members(object sender, RoutedEventArgs e)
+        {
+            MembList.Text = "Unreturned";
+            Members = TempEmployee.getUnreturned();
+            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+        }
+        private void Employee_MembersSection_ListSection_SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            MemberUsernameSearch.Text = "";
+            if (AllMembButton.Visibility == Visibility.Visible)
+            {
+                AllMembButton.Visibility = Visibility.Hidden;
+                UnreturnedMembButton.Visibility = Visibility.Hidden;
+                ExpiredLicenseMembButton.Visibility = Visibility.Hidden;
+                MemberInfoRect.Visibility = Visibility.Visible;
+                MemberInfo.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AllMembButton.Visibility = Visibility.Visible;
+                UnreturnedMembButton.Visibility = Visibility.Visible;
+                ExpiredLicenseMembButton.Visibility = Visibility.Visible;
+                MemberInfoRect.Visibility = Visibility.Hidden;
+                MemberInfo.Visibility = Visibility.Hidden;
+            }
+        }
+        private void MemberInfoButton(object sender, RoutedEventArgs e)
+        {
+            Members = TempEmployee.getMemberwithUsername(MemberUsernameSearch.Text);
+            if (Members.Count == 0)
+            {
+                MembList.Text = "Not Found!";
+            }
+            else
+            {
+                MembList.Text = MemberUsernameSearch.Text;
+            }
+            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
         }
         private void Employee_MembersSection_ListSection_Back_Button_Click(object sender, RoutedEventArgs e)
         {
+            AllMembButton.Visibility = Visibility.Visible;
+            UnreturnedMembButton.Visibility = Visibility.Visible;
+            ExpiredLicenseMembButton.Visibility = Visibility.Visible;
+            MemberInfoRect.Visibility = Visibility.Hidden;
+            MemberInfo.Visibility = Visibility.Hidden;
+            MembList.Text = "Unreturned";
+            Members = TempEmployee.getUnreturned();
+            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
         }
 
@@ -868,15 +1114,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Employee bank acconut section : 
-        private void Employee_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-        private void Employee_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        // Employee Wallet section : 
         private void Employee_BankAccountSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
@@ -890,17 +1128,73 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Edit acconut section : 
-        private void Edit_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
+        // Employee Edit acconut section :
+        private void Employee_Edit_Information_Button(object sender, RoutedEventArgs e)
         {
-
-        }
-        private void Edit_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
-        {
-
+            bool flag = true;
+            if (EmailRegex(EmployeeEditEmailBox.Text))
+            {
+                if (emailNotTaken(EmployeeEditEmailBox.Text) || EmployeeEditEmailBox.Text == TempEmployee.Email)
+                {
+                    EmployeeEdit_Email_Alert.Text = "";
+                }
+                else
+                {
+                    EmployeeEdit_Email_Alert.Text = "Email has already taken!";
+                    flag = false;
+                }
+            }
+            else
+            {
+                EmployeeEdit_Email_Alert.Text = "Email does not have the correct format!";
+                flag = false;
+            }
+            if (PhoneNumberRegex(EmployeeEditPhoneNumberBox.Text))
+            {
+                if (phoneNumberNotTaken(EmployeeEditPhoneNumberBox.Text) || EmployeeEditPhoneNumberBox.Text == TempEmployee.Phone_Number)
+                {
+                    EmployeeEdit_PhoneNumber_Alert.Text = "";
+                }
+                else
+                {
+                    EmployeeEdit_PhoneNumber_Alert.Text = "Phone Number has already taken!";
+                    flag = false;
+                }
+            }
+            else
+            {
+                EmployeeEdit_PhoneNumber_Alert.Text = "Phone Number does not have the correct format!";
+                flag = false;
+            }
+            if (usernameAvailableAndMatch(EmployeeEditUsernameBox.Text, EmployeeEditPasswordBox.Password) == Types.Employee)
+            {
+                EmployeeEdit_Password_Alert.Text = "";
+            }
+            else
+            {
+                EmployeeEdit_Password_Alert.Foreground = Brushes.Red;
+                EmployeeEdit_Password_Alert.Text = "Password and Username aren't match";
+                flag = false;
+            }
+            if (flag)
+            {
+                TempEmployee.editInformation(EmployeeEditEmailBox.Text, EmployeeEditPhoneNumberBox.Text);
+                TempEmployee.Email = EmployeeEditEmailBox.Text;
+                TempEmployee.Phone_Number = EmployeeEditPhoneNumberBox.Text;
+                EmployeeEditPasswordBox.Password = "";
+                EmployeeEdit_Password_Alert.Foreground = Brushes.Green;
+                EmployeeEdit_Password_Alert.Text = "Employee's information changed.";
+            }
         }
         private void Employee_EditAccountSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            EmployeeEditUsernameBox.Text = TempEmployee.Username;
+            EmployeeEditEmailBox.Text = TempEmployee.Email;
+            EmployeeEditPhoneNumberBox.Text = TempEmployee.Phone_Number;
+            EmployeeEditPasswordBox.Password = "";
+            EmployeeEdit_Password_Alert.Text = "";
+            EmployeeEdit_PhoneNumber_Alert.Text = "";
+            EmployeeEdit_Email_Alert.Text = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
         }
 
@@ -910,7 +1204,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Member Information section : 
+        //Member Information section :
         private void MemberInformation_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
 
@@ -1078,16 +1372,24 @@ namespace WPF_Project___Bookstore
 
 
         // Member Bank Account section : 
-        private void Member_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
         private void Member_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                TempDeposit = int.Parse(Member_Wallet_BankBalance_Deposit.Text);
+                Member_Wallet_Alert.Text = "";
+                Member_Wallet_BankBalance_Deposit.Text = "";
+                Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Payment_Page));
+            }
+            catch (Exception)
+            {
+                Member_Wallet_Alert.Text = "Please enter the value in the correct format!";
+            }
         }
         private void Member_Bank_AccountSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            Member_Wallet_Alert.Text = "";
+            Member_Wallet_BankBalance_Deposit.Text = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
         }
 
@@ -1099,17 +1401,73 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Member Edit acconut section : 
-        private void MemberEdit_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
+        // Member Edit information section : 
+        private void Member_Edit_Information_Button(object sender, RoutedEventArgs e)
         {
-
-        }
-        private void MemberEdit_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
-        {
-
+            bool flag = true;
+            if (EmailRegex(MemberEditEmailBox.Text))
+            {
+                if (emailNotTaken(MemberEditEmailBox.Text) || MemberEditEmailBox.Text == TempMember.Email)
+                {
+                    MemberEdit_Email_Alert.Text = "";
+                }
+                else
+                {
+                    MemberEdit_Email_Alert.Text = "Email has already taken!";
+                    flag = false;
+                }
+            }
+            else
+            {
+                MemberEdit_Email_Alert.Text = "Email does not have the correct format!";
+                flag = false;
+            }
+            if (PhoneNumberRegex(MemberEditPhoneNumberBox.Text))
+            {
+                if (phoneNumberNotTaken(MemberEditPhoneNumberBox.Text) || MemberEditPhoneNumberBox.Text == TempMember.Phone_Number)
+                {
+                    MemberEdit_PhoneNumber_Alert.Text = "";
+                }
+                else
+                {
+                    MemberEdit_PhoneNumber_Alert.Text = "Phone Number has already taken!";
+                    flag = false;
+                }
+            }
+            else
+            {
+                MemberEdit_PhoneNumber_Alert.Text = "Phone Number does not have the correct format!";
+                flag = false;
+            }
+            if (usernameAvailableAndMatch(MemberEditUsernameBox.Text, MemberEditPasswordBox.Password) == Types.Member)
+            {
+                MemberEdit_Password_Alert.Text = "";
+            }
+            else
+            {
+                MemberEdit_Password_Alert.Foreground = Brushes.Red;
+                MemberEdit_Password_Alert.Text = "Password and Username aren't match";
+                flag = false;
+            }
+            if (flag)
+            {
+                TempMember.editInformation(MemberEditEmailBox.Text, MemberEditPhoneNumberBox.Text);
+                TempMember.Email = MemberEditEmailBox.Text;
+                TempMember.Phone_Number = MemberEditPhoneNumberBox.Text;
+                MemberEditPasswordBox.Password = "";
+                MemberEdit_Password_Alert.Foreground = Brushes.Green;
+                MemberEdit_Password_Alert.Text = "Member's information changed.";
+            }
         }
         private void Member_EditAccountSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            MemberEditUsernameBox.Text = TempMember.Username;
+            MemberEditEmailBox.Text = TempMember.Email;
+            MemberEditPhoneNumberBox.Text = TempMember.Phone_Number;
+            MemberEditPasswordBox.Password = "";
+            MemberEdit_Password_Alert.Text = "";
+            MemberEdit_PhoneNumber_Alert.Text = "";
+            MemberEdit_Email_Alert.Text = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
         }
 
@@ -1164,9 +1522,42 @@ namespace WPF_Project___Bookstore
 
         private void Exit_Button_Click(object sender, RoutedEventArgs e)
         {
-            Employees = null;
-            Books = null;
+            //Reset Temps
+            Employees = new ObservableCollection<Employee>();
+            Members = new ObservableCollection<Member>();
+            Books = new ObservableCollection<Book>();
             Access = Types.NotFound;
+            temp_username = temp_email = temp_phone_number = temp_password = "";
+            TempManager = null;
+            TempEmployee = null;
+            TempMember = null;
+            TempBook = null;
+            TempDeposit = 0;
+            RemoveEmployees = new List<string>();
+
+            //Empty Tables
+            Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+            Bindi_Books.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+            DataContext = this;
+
+            Manager_Balance.Text = "Balance : " + 0 + " T";
+            Employee_Balance.Text = "Balance : " + 0 + " T";
+            Member_Balance.Text = "Balance : " + 0 + " T";
+
+            EmployeeEditUsernameBox.Text = "";
+            EmployeeEditEmailBox.Text = "";
+            EmployeeEditPhoneNumberBox.Text = "";
+            EmployeeEditPasswordBox.Password = "";
+
+            MemberEditUsernameBox.Text = "";
+            MemberEditEmailBox.Text = "";
+            MemberEditPhoneNumberBox.Text = "";
+            MemberEditPasswordBox.Password = "";
+
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Login_Page));
         }
         private void Back_Button_Click(object sender, RoutedEventArgs e)
@@ -1431,13 +1822,13 @@ namespace WPF_Project___Bookstore
                     last_id = int.Parse(dataTable.Rows[dataTable.Rows.Count - 1][0].ToString()) + 1;
                 }
                 SqlCommand comm1 = new SqlCommand(command, conn1);
-                comm1.BeginExecuteNonQuery();
+                comm1.ExecuteNonQuery();
                 conn1.Close();
 
                 //Insert Data
                 SqlConnection conn2 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
                 conn2.Open();
-                command = "insert into Users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "'),'" + this.balance + "')";
+                command = "insert into users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "','" + this.balance + "')";
                 SqlCommand comm2 = new SqlCommand(command, conn2);
                 comm2.ExecuteNonQuery();
                 conn2.Close();
@@ -1533,7 +1924,7 @@ namespace WPF_Project___Bookstore
             }
             conn.Close();
         }
-        public string payEmployee(int money)
+        public bool payEmployee()
         {
             SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
             conn.Open();
@@ -1555,8 +1946,14 @@ namespace WPF_Project___Bookstore
             comm.ExecuteNonQuery();
             if (empnum * 250 <= this.Balance)
             {
+                //Update Admin Balance
                 this.Balance -= empnum * 250;
-                fillUserWith(this.Username);
+                command = "update users SET balance = '" + (this.Balance) + "' where username = '" + this.Username + "'";
+                SqlCommand comm1 = new SqlCommand(command, conn);
+                comm1.ExecuteNonQuery();
+
+
+                //Update Employees Balance
                 command = "select * from users";
                 adapter = new SqlDataAdapter(command, conn);
                 dataTable = new DataTable();
@@ -1565,20 +1962,20 @@ namespace WPF_Project___Bookstore
                 {
                     if (dataTable.Rows[i][5].ToString() == "employee")
                     {
-                        string newcommand = "update books SET balance = '" + (int.Parse(dataTable.Rows[i][6].ToString()) + 250) + "' where id = '" + dataTable.Rows[i][0] + "'";
-                        SqlCommand comm1 = new SqlCommand(command, conn);
+                        string newcommand = "update users SET balance = '" + (int.Parse(dataTable.Rows[i][6].ToString()) + 250) + "' where id = '" + dataTable.Rows[i][0] + "'";
+                        comm1 = new SqlCommand(newcommand, conn);
                         comm1.ExecuteNonQuery();
                     }
                 }
                 comm = new SqlCommand(command, conn);
                 comm.ExecuteNonQuery();
                 conn.Close();
-                return "Employee salaries were paid";
+                return true;
             }
             else
             {
                 conn.Close();
-                return "We don't have enough budget";
+                return false;
             }
         }
     }
@@ -1591,6 +1988,127 @@ namespace WPF_Project___Bookstore
         public Employee()
         {
 
+        }
+        public ObservableCollection<Member> getAllMembers()
+        {
+            ObservableCollection<Member> Membs = new ObservableCollection<Member>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from users";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][5].ToString() == "member")
+                {
+                    Membs.Add(new Member(dataTable.Rows[i][1].ToString(),
+                                          dataTable.Rows[i][2].ToString(),
+                                          dataTable.Rows[i][3].ToString(),
+                                          dataTable.Rows[i][4].ToString(),
+                                          dataTable.Rows[i][5].ToString(),
+                                          int.Parse(dataTable.Rows[i][6].ToString())));
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.BeginExecuteNonQuery();
+            conn.Close();
+            return Membs;
+        }
+        public ObservableCollection<Member> getUnreturned()
+        {
+            ObservableCollection<Member> Membs = new ObservableCollection<Member>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from users";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][5].ToString() == "member")
+                {
+                    if(dataTable.Rows[i][7].ToString() == "True")
+                    Membs.Add(new Member(dataTable.Rows[i][1].ToString(),
+                                          dataTable.Rows[i][2].ToString(),
+                                          dataTable.Rows[i][3].ToString(),
+                                          dataTable.Rows[i][4].ToString(),
+                                          dataTable.Rows[i][5].ToString(),
+                                          int.Parse(dataTable.Rows[i][6].ToString())));
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.BeginExecuteNonQuery();
+            conn.Close();
+            return Membs;
+        }
+        public ObservableCollection<Member> getExpiredLicense()
+        {
+            ObservableCollection<Member> Membs = new ObservableCollection<Member>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from users";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][5].ToString() == "member")
+                {
+                    if (dataTable.Rows[i][8].ToString() == "True")
+                        Membs.Add(new Member(dataTable.Rows[i][1].ToString(),
+                                              dataTable.Rows[i][2].ToString(),
+                                              dataTable.Rows[i][3].ToString(),
+                                              dataTable.Rows[i][4].ToString(),
+                                              dataTable.Rows[i][5].ToString(),
+                                              int.Parse(dataTable.Rows[i][6].ToString())));
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.BeginExecuteNonQuery();
+            conn.Close();
+            return Membs;
+        }
+        public ObservableCollection<Member> getMemberwithUsername(string u)
+        {
+            ObservableCollection<Member> Membs = new ObservableCollection<Member>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from users";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][5].ToString() == "member")
+                {
+                    if (dataTable.Rows[i][1].ToString() == u)
+                        Membs.Add(new Member(dataTable.Rows[i][1].ToString(),
+                                              dataTable.Rows[i][2].ToString(),
+                                              dataTable.Rows[i][3].ToString(),
+                                              dataTable.Rows[i][4].ToString(),
+                                              dataTable.Rows[i][5].ToString(),
+                                              int.Parse(dataTable.Rows[i][6].ToString())));
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.BeginExecuteNonQuery();
+            conn.Close();
+            return Membs;
+        }
+        public void editInformation(string newemail, string newphone)
+        {
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "update users SET email = '" + newemail.Trim() + "' , phone_number = '" + newphone.Trim() + "' where username = '" + this.Username + "'";
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
         }
         public void showBorrowedBooklist()
         {
@@ -1638,6 +2156,16 @@ namespace WPF_Project___Bookstore
         public Member()
         {
 
+        }
+        public void editInformation(string newemail, string newphone)
+        {
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "update users SET email = '" + newemail.Trim() + "' , phone_number = '" + newphone.Trim() + "' where username = '" + this.Username + "'";
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
         }
         public void loanBook(string bookname)
         {
