@@ -41,6 +41,9 @@ namespace WPF_Project___Bookstore
         public ObservableCollection<Book> Books { get; set; } = new ObservableCollection<Book>();
         public MainWindow()
         {
+            //Updates
+            Member.Update_License_Time();
+            //
             InitializeComponent();
             foreach (TabItem tab in Tabs.Items)
             {
@@ -370,6 +373,18 @@ namespace WPF_Project___Bookstore
                             Member_Balance.Text = "Balance : " + TempMember.Balance + " T";
 
 
+                            if (TempMember.License_Time >= 0)
+                            {
+                                License_Border.Background = Brushes.GreenYellow.Clone();
+                                Member_License.Text = "Your license is valid for " + TempMember.License_Time + " days";
+                            }
+                            else
+                            {
+                                License_Border.Background = Brushes.OrangeRed.Clone();
+                                Member_License.Text = "Your license has expired for " + (-1)*TempMember.License_Time + " days";
+                            }
+
+
                             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
                             break;
                         case Types.NotFound:
@@ -589,7 +604,7 @@ namespace WPF_Project___Bookstore
                 }
                 if (Access == Types.NotFound)
                 {
-                    TempMember = new Member(temp_username.ToLower(), temp_email.ToLower(), temp_phone_number, temp_password, "member", 0);
+                    TempMember = new Member(temp_username.ToLower(), temp_email.ToLower(), temp_phone_number, temp_password, "member", 0, DateTime.Now);
                     if (TempMember.fillDatabase())
                     {
                         Access = Types.Member;
@@ -875,7 +890,7 @@ namespace WPF_Project___Bookstore
             }
             if (flag)
             {
-                TempEmployee = new Employee(AddEmployee_Username.Text.ToLower(), AddEmployeeEmailBox.Text.ToLower(), AddEmployeePhoneNumberBox.Text, AddEmployeePasswordBox.Password, "employee", 0);
+                TempEmployee = new Employee(AddEmployee_Username.Text.ToLower(), AddEmployeeEmailBox.Text.ToLower(), AddEmployeePhoneNumberBox.Text, AddEmployeePasswordBox.Password, "employee", 0, DateTime.Now);
                 TempEmployee.fillDatabase();
                 TempEmployee = null;
                 Employees = TempManager.getEmployees();
@@ -1345,20 +1360,34 @@ namespace WPF_Project___Bookstore
 
 
         // Member License section : 
-        private void Member_License_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void Member_License_Renew_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-        private void Member_LicenseSection_DepositButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void Member_License_Click(object sender, RoutedEventArgs e)
-        {
-
+            if (TempMember.Balance >= 100)
+            {
+                Member_License_Renew_Alert.Foreground = Brushes.Green;
+                TempMember.renewLicense();
+                if (TempMember.License_Time >= 0)
+                {
+                    License_Border.Background = Brushes.GreenYellow.Clone();
+                    Member_License.Text = "Your license is valid for " + TempMember.License_Time + " days";
+                }
+                else
+                {
+                    License_Border.Background = Brushes.OrangeRed.Clone();
+                    Member_License.Text = "Your license has expired for " + (-1) * TempMember.License_Time + " days";
+                }
+                Member_Balance.Text = "Balance : " + TempMember.Balance + " T";
+                Member_License_Renew_Alert.Text = "Your license has been successfully renewed.";
+            }
+            else
+            {
+                Member_License_Renew_Alert.Foreground = Brushes.Red;
+                Member_License_Renew_Alert.Text = "You have " + (100 - TempMember.Balance) + " T less to renew your license!";
+            }
         }
         private void Member_LicenseSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            Member_License_Renew_Alert.Text = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
         }
 
@@ -1547,6 +1576,10 @@ namespace WPF_Project___Bookstore
             Manager_Balance.Text = "Balance : " + 0 + " T";
             Employee_Balance.Text = "Balance : " + 0 + " T";
             Member_Balance.Text = "Balance : " + 0 + " T";
+
+            License_Border.Background = Brushes.GreenYellow.Clone();
+            Member_License.Text = "Your license is valid for " + 0 + " days";
+
 
             EmployeeEditUsernameBox.Text = "";
             EmployeeEditEmailBox.Text = "";
@@ -1761,6 +1794,7 @@ namespace WPF_Project___Bookstore
         private string password;
         private string type;
         private int balance;
+        private DateTime registration_date;
         public string Username
         {
             get { return this.username; }
@@ -1791,7 +1825,12 @@ namespace WPF_Project___Bookstore
             get { return this.balance; }
             set { this.balance = value; }
         }
-        public User(string username, string emailAddress, string telephonenumber, string password, string type , int balance)
+        public DateTime Registration_Date
+        {
+            get { return this.registration_date; }
+            set { this.registration_date = value; }
+        }
+        public User(string username, string emailAddress, string telephonenumber, string password, string type , int balance , DateTime registration_date)
         {
             this.username = username;
             this.email = emailAddress;
@@ -1799,12 +1838,13 @@ namespace WPF_Project___Bookstore
             this.password = password;
             this.type = type;
             this.balance = balance;
+            this.registration_date = registration_date;
         }
         public User()
         {
 
         }
-        public bool fillDatabase()
+        public virtual bool fillDatabase()
         {
             try
             {
@@ -1828,7 +1868,7 @@ namespace WPF_Project___Bookstore
                 //Insert Data
                 SqlConnection conn2 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
                 conn2.Open();
-                command = "insert into users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "','" + this.balance + "')";
+                command = "insert into users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "','" + this.balance + "','" + null + "','" + null + "','" + this.registration_date + "', '" + null + "' , '" + null + "' )";
                 SqlCommand comm2 = new SqlCommand(command, conn2);
                 comm2.ExecuteNonQuery();
                 conn2.Close();
@@ -1839,7 +1879,7 @@ namespace WPF_Project___Bookstore
             }
             return true;
         }
-        public bool fillUserWith(string username)
+        public virtual bool fillUserWith(string username)
         {
             try
             {
@@ -1860,6 +1900,7 @@ namespace WPF_Project___Bookstore
                         this.password = dataTable.Rows[i][4].ToString();
                         this.type = dataTable.Rows[i][5].ToString();
                         this.balance = int.Parse(dataTable.Rows[i][6].ToString());
+                        this.registration_date = (DateTime)dataTable.Rows[i][9];
                     }
                 }
                 SqlCommand comm = new SqlCommand(command, conn);
@@ -1876,7 +1917,7 @@ namespace WPF_Project___Bookstore
     public class Manager : User
     {
 
-        public Manager(string username, string emailAddress, string telephonenumber, string password, string type , int balance) : base(username,emailAddress,telephonenumber,password,type,balance)
+        public Manager(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date)
         {
 
         }
@@ -1903,7 +1944,8 @@ namespace WPF_Project___Bookstore
                                           dataTable.Rows[i][3].ToString(),
                                           dataTable.Rows[i][4].ToString(),
                                           dataTable.Rows[i][5].ToString(),
-                                          int.Parse(dataTable.Rows[i][6].ToString())));
+                                          int.Parse(dataTable.Rows[i][6].ToString()),
+                                          (DateTime)dataTable.Rows[i][9]));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -1979,9 +2021,9 @@ namespace WPF_Project___Bookstore
             }
         }
     }
-    public class Employee : User, IShow, IChange
+    public class Employee : User
     {
-        public Employee(string username, string emailAddress, string telephonenumber, string password, string type, int balance) : base(username, emailAddress, telephonenumber, password, type, balance)
+        public Employee(string username, string emailAddress, string telephonenumber, string password, string type, int balance , DateTime registration_date) : base(username, emailAddress, telephonenumber, password, type, balance , registration_date)
         {
 
         }
@@ -2008,7 +2050,8 @@ namespace WPF_Project___Bookstore
                                           dataTable.Rows[i][3].ToString(),
                                           dataTable.Rows[i][4].ToString(),
                                           dataTable.Rows[i][5].ToString(),
-                                          int.Parse(dataTable.Rows[i][6].ToString())));
+                                          int.Parse(dataTable.Rows[i][6].ToString()),
+                                          (DateTime)dataTable.Rows[i][9]));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2036,7 +2079,8 @@ namespace WPF_Project___Bookstore
                                           dataTable.Rows[i][3].ToString(),
                                           dataTable.Rows[i][4].ToString(),
                                           dataTable.Rows[i][5].ToString(),
-                                          int.Parse(dataTable.Rows[i][6].ToString())));
+                                          int.Parse(dataTable.Rows[i][6].ToString()),
+                                          (DateTime)dataTable.Rows[i][9]));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2064,7 +2108,8 @@ namespace WPF_Project___Bookstore
                                               dataTable.Rows[i][3].ToString(),
                                               dataTable.Rows[i][4].ToString(),
                                               dataTable.Rows[i][5].ToString(),
-                                              int.Parse(dataTable.Rows[i][6].ToString())));
+                                              int.Parse(dataTable.Rows[i][6].ToString()),
+                                              (DateTime)dataTable.Rows[i][9]));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2092,7 +2137,8 @@ namespace WPF_Project___Bookstore
                                               dataTable.Rows[i][3].ToString(),
                                               dataTable.Rows[i][4].ToString(),
                                               dataTable.Rows[i][5].ToString(),
-                                              int.Parse(dataTable.Rows[i][6].ToString())));
+                                              int.Parse(dataTable.Rows[i][6].ToString()),
+                                              (DateTime)dataTable.Rows[i][9]));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2110,48 +2156,65 @@ namespace WPF_Project___Bookstore
             comm.ExecuteNonQuery();
             conn.Close();
         }
-        public void showBorrowedBooklist()
-        {
-
-        }
-        public void showUnborrowedBooklist()
-        {
-
-        }
-        public void showLibraryMembers()
-        {
-
-        }
-        public void showTardyMemberInReturningLoanedBook()
-        {
-
-        }
-        public void showTardyMemberInPayMonthlyMembership()
-        {
-
-        }
-        public void showSpecifiedMemberState()
-        {
-
-        }
-        public void showPersonalAccountBalance()
-        {
-
-        }
-        public void changePersonalInforamtion()
-        {
-
-        }
-        public void showBooklist()
-        {
-
-        }
     }
-    public class Member : User, IShow, IChange
+    public class Member : User
     {
-        public Member(string username, string emailAddress, string telephonenumber, string password, string type, int balance) : base(username, emailAddress, telephonenumber, password, type, balance)
+        public static void Update_License_Time()
         {
-
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            //Update Members License Time
+            command = "select * from users";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][5].ToString() == "member")
+                {
+                    DateTime Regtime = (DateTime)dataTable.Rows[i][9];
+                    int lict = (Regtime.Year - (DateTime.Now.Year)) * 360 + (Regtime.Month - DateTime.Now.Month) * 30 + (Regtime.Day - DateTime.Now.Day);
+                    string newcommand;
+                    newcommand = "update users SET license_time = '" + (lict + 30 * int.Parse(dataTable.Rows[i][11].ToString())) + "', expired_license = '" + (lict + 30 * int.Parse(dataTable.Rows[i][11].ToString()) < 0) + "'  where id = '" + dataTable.Rows[i][0] + "'";
+                    SqlCommand comm1 = new SqlCommand(newcommand, conn);
+                    comm1.ExecuteNonQuery();
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
+        }
+        private bool unreturned;
+        private bool expired_license;
+        private int license_time;
+        private int license_number;
+        public bool Unreturned
+        {
+            get { return this.unreturned; }
+            set { this.unreturned = value; }
+        }
+        public bool Expired_License
+        {
+            get { return this.expired_license; }
+            set { this.expired_license = value; }
+        }
+        public int License_Time
+        {
+            get { return this.license_time; }
+            set { this.license_time = value; }
+        }
+        public int License_Number
+        {
+            get { return this.license_number; }
+            set { this.license_number = value; }
+        }
+        public Member(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date)
+        {
+            this.unreturned = false;
+            this.expired_license = false;
+            this.license_time = 30;
+            this.license_number = 1;
         }
         public Member()
         {
@@ -2167,37 +2230,99 @@ namespace WPF_Project___Bookstore
             comm.ExecuteNonQuery();
             conn.Close();
         }
-        public void loanBook(string bookname)
+        public void renewLicense()
         {
-
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            this.Balance -= 100;
+            this.License_Time += 30;
+            this.License_Number += 1;
+            if (this.License_Time + 30 < 0)
+            {
+                this.Expired_License = true;
+            }
+            else
+            {
+                this.Expired_License = false;
+            }
+            command = "update users SET balance = '" + this.Balance + "' , license_time = '" + this.License_Time + "', license_number = '" + this.License_Number + "', expired_license = '" + this.Expired_License + "' where username = '" + this.Username + "'";
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
         }
-        public void returnLoanedbook(string bookname)
+        public override bool fillDatabase()
         {
+            try
+            {
+                SqlConnection conn1 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+                conn1.Open();
+                //Find Last ID
+                int last_id = 1;
+                string command;
+                command = "select id from users";
+                SqlDataAdapter adapter = new SqlDataAdapter(command, conn1);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+                if (dataTable.Rows.Count > 0)
+                {
+                    last_id = int.Parse(dataTable.Rows[dataTable.Rows.Count - 1][0].ToString()) + 1;
+                }
+                SqlCommand comm1 = new SqlCommand(command, conn1);
+                comm1.ExecuteNonQuery();
+                conn1.Close();
 
+                //Insert Data
+                SqlConnection conn2 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+                conn2.Open();
+                command = "insert into users values('" + last_id + "','" + this.Username.Trim() + "','" + this.Email.Trim() + "','" + this.Phone_Number.Trim() + "','" + this.Password.Trim() + "','" + this.Type.Trim() + "','" + this.Balance + "','" + false + "','" + false + "','" + this.Registration_Date + "','" + 30 + "','" + 1 + "')";
+                SqlCommand comm2 = new SqlCommand(command, conn2);
+                comm2.ExecuteNonQuery();
+                conn2.Close();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
-        public void payLateReturnPenalty()
+        public override bool fillUserWith(string username)
         {
-
-        }
-        public void payMonthlyMembershipCost()
-        {
-
-        }
-        public void showPersonalAccountBalance()
-        {
-
-        }
-        public void depositPersonalAccount()
-        {
-
-        }
-        public void changePersonalInforamtion()
-        {
-
-        }
-        public void showBooklist()
-        {
-
+            try
+            {
+                SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+                conn.Open();
+                string command;
+                command = "select * from users";
+                SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+                for (int i = 0; i < dataTable.Rows.Count; i++)
+                {
+                    if (dataTable.Rows[i][1].ToString() == username)
+                    {
+                        this.Username = dataTable.Rows[i][1].ToString();
+                        this.Email = dataTable.Rows[i][2].ToString();
+                        this.Phone_Number = dataTable.Rows[i][3].ToString();
+                        this.Password = dataTable.Rows[i][4].ToString();
+                        this.Type = dataTable.Rows[i][5].ToString();
+                        this.Balance = int.Parse(dataTable.Rows[i][6].ToString());
+                        this.Unreturned = (bool)dataTable.Rows[i][7];
+                        this.Expired_License = (bool)dataTable.Rows[i][8];
+                        this.Registration_Date = (DateTime)dataTable.Rows[i][9];
+                        this.License_Time = int.Parse(dataTable.Rows[i][10].ToString());
+                        this.License_Number = int.Parse(dataTable.Rows[i][11].ToString());
+                    }
+                }
+                SqlCommand comm = new SqlCommand(command, conn);
+                comm.BeginExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -391,6 +391,9 @@
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
                             </Rectangle.Effect>
                         </Rectangle>
+                        <Grid>
+                            <Button VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
+                        </Grid>
                         <Grid Width="400" Height="200" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="Bank Account" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Border BorderThickness="1" BorderBrush="Blue" Margin="0,54,0,0" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Center" Background="GreenYellow" CornerRadius="15">
@@ -1286,138 +1289,38 @@
 
                 <!-- Member License Section -->
                 <TabItem x:Name="Member_License_Section_Page" TabIndex="19" Header="Member_LicenseSectuon">
-                    <Grid Background="Green">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <!--Header-->
-                        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                            <TextBlock Text="License" FontSize="30" Foreground="LightGreen"/>
-                        </StackPanel>
-
-                        <!--namayeshe mojudi-->
-                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                            <TextBlock x:Name="Member_License_BankBalance" Foreground="LightGreen"/>
-                        </StackPanel>
-
-
-                        <!--textbox-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBox x:Name="Member_License_DepositMoney_TextBox" 
-                             Background="Transparent" 
-                             BorderBrush="Transparent" 
-                             Text="Enter the amount of money you want to deposit"
-                             FontSize="20"
-                             FontWeight="Light"
-                             IsMouseCapturedChanged="Member_License_DepositMoney_TextBox_IsMouseCapturedChanged"
-                             >
-                                <TextBox.Style>
-                                    <Style TargetType="{x:Type TextBox}" >
-                                        <Setter Property="Foreground" Value="LightGreen"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </StackPanel>
-
-                        <!--border-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                            <Border x:Name="Member_LicenseSection_DepositMoney_Border"
-                        Width="400"
-                        VerticalAlignment="Center"
-                        Background="LightGreen"
-                        Opacity="0.5"
-                        Margin="2,95"
-                        Padding="0.8"
-                        />
-                        </StackPanel>
-
-
-                        <!--Buttons-->
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top">
-                            <Button Content="Deposit"
-                        Foreground="White"
-                        Click="Member_LicenseSection_DepositButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="DarkGreen"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
-                            <Button Content="Back"
-                        Foreground="White"
-                        Margin="0,30" 
-                        Click="Member_LicenseSection_BackButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
+                    <Grid>
+                        <Rectangle Height="800" VerticalAlignment="Top">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#2980B9"/>
+                                    <GradientStop Color="#6DD5FA" Offset="0.5"/>
+                                    <GradientStop Color="#FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Width="400" Height="150" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Grid>
+                            <Button VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
+                        </Grid>
+                        <Grid Width="400" Height="150" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="License" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
+                            <Border x:Name="License_Border" BorderThickness="1" BorderBrush="Blue" Margin="0,54,0,0" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Center" Background="GreenYellow" CornerRadius="15">
+                                <TextBlock x:Name="Member_License"  Padding="10,3,10,5" Style="{StaticResource MaterialDesignButtonTextBlock}" Text="Your license is valid for 0 days" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center" Margin="10,75,10,0">
+                                <TextBlock x:Name="Member_License_Renew_Alert" Text="" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-10,0,0" Foreground="red" FontSize="13"/>
+                            </StackPanel>
+                            <Button VerticalAlignment="Bottom" Margin="0,-15" Width="150" Cursor="Hand" Content="Renew License" Click="Member_License_Renew_Click"/>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-15,-15" Width="39" Height="39" Cursor="Hand" Content="Back" Click="Member_LicenseSection_BackButton_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+                        </Grid>
                     </Grid>
+
+
                 </TabItem>
 
                 <!-- Member Wallet Section -->
