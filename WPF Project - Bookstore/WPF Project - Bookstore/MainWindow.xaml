@@ -335,17 +335,17 @@
                         <Grid Width="600" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
                             <Grid Margin="-1,5,0,0" Height="20" VerticalAlignment="Top">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
                                     <ColumnDefinition Width="1.6*"/>
                                     <ColumnDefinition Width="1.6*"/>
-                                    <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Margin="10,0,0,0" Text="Name"/>
-                                <TextBlock Grid.Column="1" Text="Author"/>
-                                <TextBlock Grid.Column="2" Text="Genre"/>
-                                <TextBlock Grid.Column="3" Text="Publish No" HorizontalAlignment="Center"/>
-                                <TextBlock Grid.Column="4" Text="Number" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="ID" Margin="10,0,0,0"/>
+                                <TextBlock Grid.Column="1" Text="Name"/>
+                                <TextBlock Grid.Column="2" Text="Author"/>
+                                <TextBlock Grid.Column="3" Text="Genre"/>
+                                <TextBlock Grid.Column="4" Text="Publish No" HorizontalAlignment="Center"/>
                             </Grid>
                             <ScrollViewer Margin="0,26,0,0" >
                                 <ItemsControl Padding="0,-50,0,0" Margin="0,-3,0,0" x:Name="Bindi_Books" ItemsSource= "{Binding Books, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600">
@@ -353,18 +353,18 @@
                                         <DataTemplate>
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="0.5*"/>
                                                     <ColumnDefinition Width="1.6*"/>
                                                     <ColumnDefinition Width="1.6*"/>
-                                                    <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
                                                 <Border Grid.ColumnSpan="5" CornerRadius="5" BorderThickness="1" Background="LightBlue" BorderBrush="Black" Margin="6,3,22,0"/>
-                                                <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="{Binding Name}"/>
-                                                <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="{Binding Author}"/>
-                                                <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="{Binding Genre}"/>
-                                                <TextBlock Grid.Column="3" Margin="0,2,0,0" HorizontalAlignment="Center" Text="{Binding PublishNo}"/>
-                                                <TextBlock Grid.Column="4" Margin="0,2,0,0" HorizontalAlignment="Center" Text="{Binding Number}"/>
+                                                <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="{Binding ID}"/>
+                                                <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="{Binding Name}"/>
+                                                <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="{Binding Author}"/>
+                                                <TextBlock Grid.Column="3" Margin="0,2,0,0" Text="{Binding Genre}"/>
+                                                <TextBlock Grid.Column="4" Margin="0,2,0,0" HorizontalAlignment="Center" Text="{Binding PublishNo}"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -669,99 +669,76 @@
 
                 <!-- Employee Books Section List -->
                 <TabItem x:Name="Employee_Books_Section_List_Page" TabIndex="12" Header="Employee_BooksSection_List">
-                    <Grid Background="Bisque">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <!--Header-->
-
-                        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                            <TextBlock Text="Books List" FontSize="30" Foreground="Orange"/>
-                        </StackPanel>
-
-                        <!--List , Scroll Viewer-->
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="200,57.6,174.4,27.2" Grid.RowSpan="2" Grid.ColumnSpan="2">
-                            <StackPanel VerticalAlignment="Center" Height="182" Width="307">
-                                <TextBox x:Name="Employee_BookList_TextBox" Foreground="Orange" Height="178" Margin="-5,0,0.2,0" Background="Transparent"/>
-                            </StackPanel>
-                        </ScrollViewer>
-
-
-
-
-                        <!--Buttons-->
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top">
-                            <Button Content="Add"
-                                Foreground="White"
-                                Click="Employee_BooksSection_AddButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="DarkBlue"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
-                            <Button Content="Back"
-                                Foreground="White"
-                                Margin="0,30" 
-                                Click="Employee_BooksSection_BackButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                         CornerRadius="12"
-                                            Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
+                    <Grid>
+                        <Rectangle Height="800" VerticalAlignment="Top">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#2980B9"/>
+                                    <GradientStop Color="#6DD5FA" Offset="0.5"/>
+                                    <GradientStop Color="#FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Width="600" Height="480" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Rectangle Width="600" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" Margin="0,10,0,0">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Grid>
+                            <Button Click="Manager_EmplpyeeButton_Click" VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
+                        </Grid>
+                        <Grid Width="600" Height="470" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock x:Name="qwer2" Text="Borrowed Books" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
+                            <StackPanel VerticalAlignment="Center" Margin="10"/>
+                            <Button x:Name="AllBooksButton" VerticalAlignment="Bottom"  Margin="0,0,0,-20" Width="130" Cursor="Hand" Content="All" Click="Employee_All_Books"/>
+                            <Button x:Name="UnreturnedBooksButton" VerticalAlignment="Bottom"  Margin="-350,0,0,-20" Width="130" Cursor="Hand" Content="Borrowed" Click="Employee_Borrowed_Books"/>
+                            <Button x:Name="AvailableBooksButton" VerticalAlignment="Bottom"  Margin="350,0,0,-20" Width="130" Cursor="Hand" Content="Available" Click="Employee_Available_Books"/>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-20,-20" Width="39" Height="39" Cursor="Hand" Content="Back" Click="Employee_BooksSection_BackButton_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+                        </Grid>
+                        <Grid Width="600" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
+                            <Grid Margin="-1,5,0,0" Height="20" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.6*"/>
+                                    <ColumnDefinition Width="1.6*"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="ID" Margin="10,0,0,0"/>
+                                <TextBlock Grid.Column="1" Text="Name"/>
+                                <TextBlock Grid.Column="2" Text="Author"/>
+                                <TextBlock Grid.Column="3" Text="Genre"/>
+                                <TextBlock Grid.Column="4" Text="Publish No" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <ScrollViewer Margin="0,26,0,0" >
+                                <ItemsControl Padding="0,-50,0,0" Margin="0,-3,0,0" x:Name="Bindi_Books_Employee" ItemsSource= "{Binding Books, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                    <ColumnDefinition Width="1.6*"/>
+                                                    <ColumnDefinition Width="1.6*"/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.ColumnSpan="5" CornerRadius="5" BorderThickness="1" Background="LightBlue" BorderBrush="Black" Margin="6,3,22,0"/>
+                                                <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="{Binding ID}"/>
+                                                <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="{Binding Name}"/>
+                                                <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="{Binding Author}"/>
+                                                <TextBlock Grid.Column="3" Margin="0,2,0,0" Text="{Binding Genre}"/>
+                                                <TextBlock Grid.Column="4" Margin="0,2,0,0" HorizontalAlignment="Center" Text="{Binding PublishNo}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
                     </Grid>
                 </TabItem>
 
@@ -1093,197 +1070,175 @@
 
                 <!-- Member Books Section List -->
                 <TabItem x:Name="Member_Books_Section_List_Page" TabIndex="17" Header="Member_BooksSection_List">
-                    <Grid Background="Bisque">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <!--Header-->
-
-                        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                            <TextBlock Text="Books List" FontSize="30" Foreground="Orange"/>
+                    <Grid>
+                        <Rectangle Height="800" VerticalAlignment="Top">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#2980B9"/>
+                                    <GradientStop Color="#6DD5FA" Offset="0.5"/>
+                                    <GradientStop Color="#FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Width="600" Height="480" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Rectangle Width="600" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" Margin="0,10,0,0">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Grid>
+                            <Button Click="Manager_EmplpyeeButton_Click" VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
+                        </Grid>
+                        
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,0,0,10">
+                            <TextBlock x:Name="Borrow_Alert" Text="" VerticalAlignment="Bottom" HorizontalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="14"/>
                         </StackPanel>
-
-                        <!--List , Scroll Viewer-->
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="200,57.6,174.4,27.2" Grid.RowSpan="2" Grid.ColumnSpan="2">
-                            <StackPanel VerticalAlignment="Center" Height="182" Width="307">
-                                <TextBox x:Name="Member_BookList_TextBox" Foreground="Orange" Height="178" Margin="-5,0,0.2,0" Background="Transparent"/>
-                            </StackPanel>
-                        </ScrollViewer>
-
-
-
-
-                        <!--Buttons-->
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top">
-                            <Button Content="Add"
-                                Foreground="White"
-                                Click="Member_BooksSection_AddButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="DarkBlue"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
-                            <Button Content="Back"
-                                Foreground="White"
-                                Margin="0,30" 
-                                Click="Member_BooksSection_ListSection_Back_Button_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                         CornerRadius="12"
-                                            Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
+                        <Grid Width="600" Height="470" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Rectangle Visibility="Hidden" x:Name="BookSearchRect" RadiusX="10" RadiusY="10" Margin="0,0,0,-25" Width="400" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center" Fill="White">
+                                <Rectangle.Effect>
+                                    <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                                </Rectangle.Effect>
+                            </Rectangle>
+                            <Grid Visibility="Hidden" x:Name="BookSearch" Margin="0,0,0,-25" Width="400" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="BookNameOrAuthorSearch" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="0" Margin="10,-5,0,0" Padding="0" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Name or Author"/>
+                                <Button Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0" Height="30" Width="100" Cursor="Hand" Content="Search" HorizontalAlignment="Right" Click="BookSearchButton"/>
+                            </Grid>
+                            <TextBlock x:Name="qwer3" Text="Books" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
+                            <StackPanel VerticalAlignment="Center" Margin="10"/>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-20,-20" Width="39" Height="39" Cursor="Hand" Content="Back" Click="Member_BooksSection_ListSection_Back_Button_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="GreenYellow" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-20,-20" Width="39" Height="39" Cursor="Hand" Content="Srch" Click="Member_BooksSection_Search_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+                        </Grid>
+                        <Grid Width="600" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
+                            <Grid Margin="-1,5,0,0" Height="20" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.6*"/>
+                                    <ColumnDefinition Width="1.6*"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="0.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="ID" Margin="10,0,0,0"/>
+                                <TextBlock Grid.Column="1" Text="Name"/>
+                                <TextBlock Grid.Column="2" Text="Author"/>
+                                <TextBlock Grid.Column="3" Text="Genre"/>
+                                <TextBlock Grid.Column="4" Text="Publish No" HorizontalAlignment="Center"/>
+                                <Button x:Name="Borrow_All_Selected_Books_Button" Visibility="Hidden" Content="Remove" Grid.Column="5" Margin="5,0,0,3" Height="10" Width="10" Background="Red" HorizontalAlignment="Left" Click="Borrow_Books_Click2" />
+                            </Grid>
+                            <ScrollViewer Margin="0,26,0,0">
+                                <ItemsControl Padding="0,-50,0,0" Margin="0,-3,0,0" x:Name="Bindi_Books_Member" ItemsSource= "{Binding Books, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                    <ColumnDefinition Width="1.6*"/>
+                                                    <ColumnDefinition Width="1.6*"/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.ColumnSpan="6" CornerRadius="5" BorderThickness="1" Background="LightBlue" BorderBrush="Black" Margin="6,3,22,0"/>
+                                                <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="{Binding ID}"/>
+                                                <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="{Binding Name}"/>
+                                                <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="{Binding Author}"/>
+                                                <TextBlock Grid.Column="3" Margin="0,2,0,0" Text="{Binding Genre}"/>
+                                                <TextBlock Grid.Column="4" Margin="0,2,0,0" HorizontalAlignment="Center" Text="{Binding PublishNo}"/>
+                                                <Button Tag="{Binding ID}" Grid.Column="5" Margin="5,3,0,0" Height="10" Width="10" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" HorizontalAlignment="Left" Click="Borrow_Book_Click" Background="YellowGreen" IsDefault="False" mah:ControlsHelper.RecognizesAccessKey="True"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
                     </Grid>
                 </TabItem>
 
                 <!-- Member MyBooks Section List -->
                 <TabItem x:Name="Member_MyBooks_Section_List_Page" TabIndex="18" Header="Member_MyBooksSection_List">
-                    <Grid Background="Bisque">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="3*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
+                    <Grid>
+                        <Rectangle Height="800" VerticalAlignment="Top">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#2980B9"/>
+                                    <GradientStop Color="#6DD5FA" Offset="0.5"/>
+                                    <GradientStop Color="#FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Width="600" Height="480" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Rectangle Width="600" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" Margin="0,10,0,0">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Grid>
+                            <Button Click="Manager_EmplpyeeButton_Click" VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
+                        </Grid>
 
-                        <!--Header-->
-
-                        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                            <TextBlock Text="My Books List" FontSize="30" Foreground="Orange"/>
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,0,0,17">
+                            <TextBlock x:Name="Return_Alert" Text="" VerticalAlignment="Bottom" HorizontalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="14"/>
                         </StackPanel>
-
-                        <!--List , Scroll Viewer-->
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="200,57.6,174.4,27.2" Grid.RowSpan="2" Grid.ColumnSpan="2">
-                            <StackPanel VerticalAlignment="Center" Height="182" Width="307">
-                                <TextBox x:Name="Member_MyBookList_TextBox" Foreground="Orange" Height="178" Margin="-5,0,0.2,0" Background="Transparent"/>
-                            </StackPanel>
-                        </ScrollViewer>
-
-
-
-
-                        <!--Buttons-->
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top">
-                            <Button Content="Add"
-                                Foreground="White"
-                                Click="Member_MyBooksSection_AddButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="DarkBlue"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
-                            <Button Content="Back"
-                                Foreground="White"
-                                Margin="0,30" 
-                                Click="Member_BooksSection_BackButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                         CornerRadius="12"
-                                            Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
+                        <Grid Width="600" Height="470" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock x:Name="qwer4" Text="My Books" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
+                            <StackPanel VerticalAlignment="Center" Margin="10"/>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-20,-20" Width="39" Height="39" Cursor="Hand" Content="Back" Click="Member_BooksSection_BackButton_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+                        </Grid>
+                        <Grid Width="600" Height="400" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
+                            <Grid Margin="-1,5,0,0" Height="20" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="1.6*"/>
+                                    <ColumnDefinition Width="1.6*"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="0.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="ID" Margin="10,0,0,0"/>
+                                <TextBlock Grid.Column="1" Text="Name"/>
+                                <TextBlock Grid.Column="2" Text="Author"/>
+                                <TextBlock Grid.Column="3" Text="Genre"/>
+                                <TextBlock Grid.Column="4" Text="Publish No" HorizontalAlignment="Center"/>
+                                <Button x:Name="Return_All_Selected_Books_Button" Visibility="Hidden" Content="Remove" Grid.Column="5" Margin="5,0,0,3" Height="10" Width="10" Background="Red" HorizontalAlignment="Left" Click="Return_Books_Click2" />
+                            </Grid>
+                            <ScrollViewer Margin="0,26,0,0">
+                                <ItemsControl Padding="0,-50,0,0" Margin="0,-3,0,0" x:Name="Bindi_MyBooks_Member" ItemsSource= "{Binding Books, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                    <ColumnDefinition Width="1.6*"/>
+                                                    <ColumnDefinition Width="1.6*"/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.ColumnSpan="6" CornerRadius="5" BorderThickness="1" Background="LightBlue" BorderBrush="Black" Margin="6,3,22,0"/>
+                                                <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="{Binding ID}"/>
+                                                <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="{Binding Name}"/>
+                                                <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="{Binding Author}"/>
+                                                <TextBlock Grid.Column="3" Margin="0,2,0,0" Text="{Binding Genre}"/>
+                                                <TextBlock Grid.Column="4" Margin="0,2,0,0" HorizontalAlignment="Center" Text="{Binding PublishNo}"/>
+                                                <Button Tag="{Binding ID}" Grid.Column="5" Margin="5,3,0,0" Height="10" Width="10" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" HorizontalAlignment="Left" Click="Return_Book_Click" Background="YellowGreen" IsDefault="False" mah:ControlsHelper.RecognizesAccessKey="True"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
                     </Grid>
                 </TabItem>
 
@@ -1387,278 +1342,6 @@
                             <Button VerticalAlignment="Bottom" Margin="0,-15" Width="150" Cursor="Hand" Content="Edit" Click="Member_Edit_Information_Button"/>
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-15,-15" Width="39" Height="39" Cursor="Hand" Content="Back" Click="Member_EditAccountSection_BackButton_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
                         </Grid>
-                    </Grid>
-                </TabItem>
-
-                <!-- Member Borrow Section -->
-                <TabItem x:Name="Member_Borrow_Section_Page" TabIndex="22" Header="Member_BorrowSectuon">
-                    <Grid Background="Green">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <!--Header-->
-                        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                            <TextBlock Text="Borrow" FontSize="30" Foreground="LightGreen"/>
-                        </StackPanel>
-
-                        <!--namayeshe mojudi-->
-                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                            <TextBlock x:Name="Borrow_BankAccount_BankBalance" Foreground="LightGreen"/>
-                        </StackPanel>
-
-
-                        <!--textbox-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBox x:Name="Borrow_BankAccount_DepositMoney_TextBox" 
-                             Background="Transparent" 
-                             BorderBrush="Transparent" 
-                             Text="Enter the amount of money you want to deposit"
-                             FontSize="20"
-                             FontWeight="Light"
-                             IsMouseCapturedChanged="Borrow_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged"
-                             >
-                                <TextBox.Style>
-                                    <Style TargetType="{x:Type TextBox}" >
-                                        <Setter Property="Foreground" Value="LightGreen"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </StackPanel>
-
-                        <!--border-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                            <Border x:Name="Borrow_BankAccountSection_DepositMoney_Border"
-                        Width="400"
-                        VerticalAlignment="Center"
-                        Background="LightGreen"
-                        Opacity="0.5"
-                        Margin="2,95"
-                        Padding="0.8"
-                        />
-                        </StackPanel>
-
-
-                        <!--Buttons-->
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top">
-                            <Button Content="Deposit"
-                        Foreground="White"
-                        Click="Borrow_BankAccountSection_DepositButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="DarkGreen"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
-                            <Button Content="Back"
-                        Foreground="White"
-                        Margin="0,30" 
-                        Click="Back_Button_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-                    </Grid>
-                </TabItem>
-
-                <!-- Member Return Section -->
-                <TabItem x:Name="Member_Return_Section_Page" TabIndex="23" Header="Member_ReturnSectuon">
-                    <Grid Background="Green">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <!--Header-->
-                        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                            <TextBlock Text="Bank Account" FontSize="30" Foreground="LightGreen"/>
-                        </StackPanel>
-
-                        <!--namayeshe mojudi-->
-                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                            <TextBlock x:Name="Return_BankAccount_BankBalance" Foreground="LightGreen"/>
-                        </StackPanel>
-
-
-                        <!--textbox-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBox x:Name="Return_BankAccount_DepositMoney_TextBox" 
-                             Background="Transparent" 
-                             BorderBrush="Transparent" 
-                             Text="Enter the amount of money you want to deposit"
-                             FontSize="20"
-                             FontWeight="Light"
-                             IsMouseCapturedChanged="Return_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged"
-                             >
-                                <TextBox.Style>
-                                    <Style TargetType="{x:Type TextBox}" >
-                                        <Setter Property="Foreground" Value="LightGreen"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </StackPanel>
-
-                        <!--border-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                            <Border x:Name="Return_BankAccountSection_DepositMoney_Border"
-                        Width="400"
-                        VerticalAlignment="Center"
-                        Background="LightGreen"
-                        Opacity="0.5"
-                        Margin="2,95"
-                        Padding="0.8"
-                        />
-                        </StackPanel>
-
-
-                        <!--Buttons-->
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top">
-                            <Button Content="Deposit"
-                        Foreground="White"
-                        Click="Return_BankAccountSection_DepositButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="DarkGreen"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
-                            <Button Content="Back"
-                        Foreground="White"
-                        Margin="0,30" 
-                        Click="Back_Button_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
                     </Grid>
                 </TabItem>
 

@@ -35,7 +35,10 @@ namespace WPF_Project___Bookstore
         Member TempMember;
         Book TempBook;
         int TempDeposit;
+        string TempSearchBook;
         public List<string> RemoveEmployees = new List<string>();
+        public List<int> BorrowedBooks = new List<int>();
+        public List<int> ReturnedBooks = new List<int>();
         public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
         public ObservableCollection<Member> Members { get; set; } = new ObservableCollection<Member>();
         public ObservableCollection<Book> Books { get; set; } = new ObservableCollection<Book>();
@@ -43,6 +46,7 @@ namespace WPF_Project___Bookstore
         {
             //Updates
             Member.Update_License_Time();
+            Book.Update_Delay();
             //
             InitializeComponent();
             foreach (TabItem tab in Tabs.Items)
@@ -307,7 +311,7 @@ namespace WPF_Project___Bookstore
                             Employees = TempManager.getEmployees();
                             Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
-                            Books = TempBook.getBooks();
+                            Books = TempBook.getAllBooks();
                             Bindi_Books.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
                             DataContext = this;
@@ -319,6 +323,7 @@ namespace WPF_Project___Bookstore
                         case Types.Employee:
                             Access = Types.Employee;
                             TempEmployee = new Employee();
+                            TempBook = new Book();
                             if (TempEmployee.fillUserWith(LoginUsernameBox.Text) == false)
                             {
                                 throw new Exception("Database Error!!!");
@@ -329,7 +334,13 @@ namespace WPF_Project___Bookstore
 
                             Members = TempEmployee.getUnreturned();
                             Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+                            Books = TempBook.getBorrowedBooks();
+                            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
                             DataContext = this;
+
+
                             Employee_Balance.Text = "Balance : " + TempEmployee.Balance + " T";
 
 
@@ -356,6 +367,7 @@ namespace WPF_Project___Bookstore
                         case Types.Member:
                             Access = Types.Member;
                             TempMember = new Member();
+                            TempBook = new Book();
                             if (TempMember.fillUserWith(LoginUsernameBox.Text) == false)
                             {
                                 throw new Exception("Database Error!!!");
@@ -608,6 +620,33 @@ namespace WPF_Project___Bookstore
                     if (TempMember.fillDatabase())
                     {
                         Access = Types.Member;
+                        TempBook = new Book();
+
+
+                        MemberEditUsernameBox.Text = TempMember.Username;
+                        MemberEditEmailBox.Text = TempMember.Email;
+                        MemberEditPhoneNumberBox.Text = TempMember.Phone_Number;
+                        MemberEditPasswordBox.Password = "";
+                        Member_Balance.Text = "Balance : " + TempMember.Balance + " T";
+
+
+                        if (TempMember.License_Time >= 0)
+                        {
+                            License_Border.Background = Brushes.GreenYellow.Clone();
+                            Member_License.Text = "Your license is valid for " + TempMember.License_Time + " days";
+                        }
+                        else
+                        {
+                            License_Border.Background = Brushes.OrangeRed.Clone();
+                            Member_License.Text = "Your license has expired for " + (-1) * TempMember.License_Time + " days";
+                        }
+
+                        Books = TempBook.getAvailableBooks();
+                        Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+                        DataContext = this;
+
+
                         Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
                     }
                     else
@@ -969,7 +1008,7 @@ namespace WPF_Project___Bookstore
             }
             if (flag)
             {
-                TempBook = new Book(AddBooks_BookNameBox.Text, AddBooks_AuthorBox.Text, AddBooks_GenreBox.Text, AddBooks_PrintNoBox.Text, 1);
+                TempBook = new Book(-1, AddBooks_BookNameBox.Text, AddBooks_AuthorBox.Text, AddBooks_GenreBox.Text, AddBooks_PrintNoBox.Text, true, 0);
                 TempBook.fillDatabase();
                 AddBooks_BookNameBox.Text = "";
                 AddBooks_AuthorBox.Text = "";
@@ -981,7 +1020,7 @@ namespace WPF_Project___Bookstore
                 Manager_Add_Book_PrintNo_Alert.Text = "";
                 Manager_Add_Book_PrintNo_Alert.Foreground = Brushes.Green.Clone();
                 Manager_Add_Book_PrintNo_Alert.Text = "Book successfully added.";
-                Books = TempBook.getBooks();
+                Books = TempBook.getAllBooks();
                 Bindi_Books.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
                 DataContext = this;
             }
@@ -1114,12 +1153,33 @@ namespace WPF_Project___Bookstore
 
         // Employee Book Section : 
 
-        private void Employee_BooksSection_AddButton_Click(object sender, RoutedEventArgs e)
+        private void Employee_All_Books(object sender, RoutedEventArgs e)
         {
-
+            qwer2.Text = "All Books";
+            Books = TempBook.getAllBooks();
+            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+        }
+        private void Employee_Borrowed_Books(object sender, RoutedEventArgs e)
+        {
+            qwer2.Text = "Borrowed Books";
+            Books = TempBook.getBorrowedBooks();
+            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+        }
+        private void Employee_Available_Books(object sender, RoutedEventArgs e)
+        {
+            qwer2.Text = "Available Books";
+            Books = TempBook.getAvailableBooks();
+            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
         }
         private void Employee_BooksSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            qwer2.Text = "Borrowed Books";
+            Books = TempBook.getBorrowedBooks();
+            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
         }
 
@@ -1295,11 +1355,17 @@ namespace WPF_Project___Bookstore
 
         private void Member_BooksButton_Click(object sender, RoutedEventArgs e)
         {
+            Books = TempBook.getAvailableBooks();
+            Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Books_Section_List_Page));
         }
 
         private void Member_MyBookButton_Click(object sender, RoutedEventArgs e)
         {
+            Books = TempMember.getBooksWithUsername();
+            Bindi_MyBooks_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_MyBooks_Section_List_Page));
         }
 
@@ -1322,13 +1388,130 @@ namespace WPF_Project___Bookstore
 
 
         //Member Books Section :
-        private void Member_BooksSection_AddButton_Click(object sender, RoutedEventArgs e)
+        private void Member_BooksSection_Search_Click(object sender, RoutedEventArgs e)
         {
-
+            Borrow_Alert.Text = "";
+            BorrowedBooks = new List<int>();
+            Borrow_All_Selected_Books_Button.Visibility = Visibility.Hidden;
+            Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+            qwer3.Foreground = Brushes.Gray;
+            BookNameOrAuthorSearch.Text = "";
+            if (BookSearchRect.Visibility == Visibility.Hidden)
+            {
+                qwer3.Text = "Book Search";
+                Books = null;
+                Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+                DataContext = this;
+                BookSearchRect.Visibility = Visibility.Visible;
+                BookSearch.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                qwer3.Text = "Books";
+                Books = TempBook.getAvailableBooks();
+                Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+                DataContext = this;
+                BookSearchRect.Visibility = Visibility.Hidden;
+                BookSearch.Visibility = Visibility.Hidden;
+            }
+        }
+        private void BookSearchButton(object sender, RoutedEventArgs e)
+        {
+            Borrow_Alert.Text = "";
+            BorrowedBooks = new List<int>();
+            Borrow_All_Selected_Books_Button.Visibility = Visibility.Hidden;
+            Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+            TempSearchBook = BookNameOrAuthorSearch.Text;
+            Books = TempBook.getSearchedBooks(TempSearchBook);
+            if (Books.Count == 0)
+            {
+                qwer3.Foreground = Brushes.Red;
+                qwer3.Text = "Not Found!";
+            }
+            else
+            {
+                qwer3.Foreground = Brushes.Gray;
+                qwer3.Text = "Book Search";
+            }
+            Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
         }
         private void Member_BooksSection_ListSection_Back_Button_Click(object sender, RoutedEventArgs e)
         {
+            qwer3.Text = "Books";
+            qwer3.Foreground = Brushes.Gray;
+            Books = null;
+            Borrow_Alert.Text = "";
+            BorrowedBooks = new List<int>();
+            Borrow_All_Selected_Books_Button.Visibility = Visibility.Hidden;
+            Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+            BookSearchRect.Visibility = Visibility.Hidden;
+            BookSearch.Visibility = Visibility.Hidden;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
+        }
+        private void Borrow_Book_Click(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).Width == 10)
+            {
+                if (BorrowedBooks.Count + TempMember.Borrowed_Number < 5)
+                {
+                    ((Button)sender).Width = 10.5;
+                    ((Button)sender).Height = 10.5;
+                    ((Button)sender).Background = Brushes.DeepPink.Clone();
+                    BorrowedBooks.Add((int)((Button)sender).Tag);
+                    Borrow_All_Selected_Books_Button.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Borrow_Alert.Text = "You can't borrow more than 5 books!";
+                }
+            }
+            else
+            {
+                Borrow_Alert.Text = "";
+                ((Button)sender).Width = 10;
+                ((Button)sender).Height = 10;
+                ((Button)sender).Background = Brushes.YellowGreen.Clone();
+                BorrowedBooks.Remove((int)((Button)sender).Tag);
+                if (BorrowedBooks.Count == 0)
+                {
+                    Borrow_All_Selected_Books_Button.Visibility = Visibility.Hidden;
+                }
+            }
+        }
+        private void Borrow_Books_Click2(object sender, RoutedEventArgs e)
+        {
+            if(TempMember.License_Time < 7)
+            {
+                Borrow_Alert.Foreground = Brushes.Red;
+                Borrow_Alert.Text = "Your license has expired or is about to expire!";
+                return;
+            }
+            if (TempMember.Unreturned)
+            {
+                Borrow_Alert.Foreground = Brushes.Red;
+                Borrow_Alert.Text = "You have a delayed book, please return it first!";
+                return;
+            }
+
+            Borrow_Alert.Text = "";
+            TempMember.editBorrowedNumber(TempMember.Borrowed_Number + BorrowedBooks.Count);
+            TempBook.borrowSelectedBooks(BorrowedBooks, TempMember.Username);
+            BorrowedBooks = new List<int>();
+            if(BookSearchRect.Visibility == Visibility.Visible)
+            {
+                Books = TempBook.getSearchedBooks(TempSearchBook);
+            }
+            else
+            {
+                Books = TempBook.getAvailableBooks();
+            }
+            Borrow_All_Selected_Books_Button.Visibility = Visibility.Hidden;
+            Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
         }
 
 
@@ -1341,15 +1524,83 @@ namespace WPF_Project___Bookstore
 
 
 
-
-        // Member MyBooks Section : 
-
-        private void Member_MyBooksSection_AddButton_Click(object sender, RoutedEventArgs e)
+        // Member MyBooks Section :
+        private void Return_Book_Click(object sender, RoutedEventArgs e)
         {
+            Return_Alert.Text = "";
+            if (((Button)sender).Width == 10)
+            {
+                if (true)
+                {
+                    ((Button)sender).Width = 10.5;
+                    ((Button)sender).Height = 10.5;
+                    ((Button)sender).Background = Brushes.DeepPink.Clone();
+                    ReturnedBooks.Add((int)((Button)sender).Tag);
+                    Return_All_Selected_Books_Button.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    //Borrow_Alert.Text = "You can't borrow more than 5 books!";
+                }
+            }
+            else
+            {
+                ((Button)sender).Width = 10;
+                ((Button)sender).Height = 10;
+                ((Button)sender).Background = Brushes.YellowGreen.Clone();
+                ReturnedBooks.Remove((int)((Button)sender).Tag);
+                if (ReturnedBooks.Count == 0)
+                {
+                    Return_All_Selected_Books_Button.Visibility = Visibility.Hidden;
+                }
+            }
+        }
+        private void Return_Books_Click2(object sender, RoutedEventArgs e)
+        {
+            int sum = 0;
+            for(int i = 0; i < ReturnedBooks.Count; i++)
+            {
+                for(int j = 0; j < Books.Count; j++)
+                {
+                    if (ReturnedBooks[i] == Books[j].ID)
+                    {
+                        if (Books[j].Delay > 0)
+                        {
+                            sum += Books[j].Delay;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (sum <= TempMember.Balance)
+            {
 
+                Return_Alert.Foreground = Brushes.Green;
+                Return_Alert.Text = "The books were returned and you were fined " + sum +" T";
+                TempBook.returnSelectedBooks(ReturnedBooks, TempMember.Username);
+                TempMember.editBorrowedNumber(TempMember.Borrowed_Number - ReturnedBooks.Count);
+                TempMember.returnBooks(sum, ReturnedBooks);
+                ReturnedBooks = new List<int>();
+                Books = TempMember.getBooksWithUsername();
+                Member_Balance.Text = "Balance : " + TempMember.Balance + " T";
+                Return_All_Selected_Books_Button.Visibility = Visibility.Hidden;
+                Bindi_MyBooks_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+                DataContext = this;
+            }
+            else
+            {
+                Return_Alert.Foreground = Brushes.Red;
+                Return_Alert.Text = "You have " + (sum - TempMember.Balance) + " T less to pay your fine";
+            }
         }
         private void Member_BooksSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            Books = null;
+            Bindi_MyBooks_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+            Return_Alert.Text = "";
+            ReturnedBooks = new List<int>();
+            Return_All_Selected_Books_Button.Visibility = Visibility.Hidden;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
         }
 
@@ -1359,7 +1610,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Member License section : 
+        // Member License section :
         private void Member_License_Renew_Click(object sender, RoutedEventArgs e)
         {
             if (TempMember.Balance >= 100)
@@ -1504,51 +1755,7 @@ namespace WPF_Project___Bookstore
 
 
 
-
-
-        // Borrow section : 
-        private void Borrow_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-        private void Borrow_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        //private void Employee_BankAccountSection_BackButton_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-        // Return section : 
-        private void Return_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-        private void Return_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        //private void Employee_BankAccountSection_BackButton_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //}
-
-
-
-        //BackButton 
-
+        //Exit
         private void Exit_Button_Click(object sender, RoutedEventArgs e)
         {
             //Reset Temps
@@ -1562,14 +1769,21 @@ namespace WPF_Project___Bookstore
             TempMember = null;
             TempBook = null;
             TempDeposit = 0;
-            RemoveEmployees = new List<string>();
+            TempSearchBook = "";
+            List<string> RemoveEmployees = new List<string>();
+            List<int> BorrowedBooks = new List<int>();
+            List<int> ReturnedBooks = new List<int>();
 
-            //Empty Tables
-            Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+        //Empty Tables
+        Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
             Bindi_Books.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
             Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+            Bindi_Books_Member.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
             DataContext = this;
 
@@ -1592,10 +1806,6 @@ namespace WPF_Project___Bookstore
             MemberEditPasswordBox.Password = "";
 
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Login_Page));
-        }
-        private void Back_Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 
@@ -1643,21 +1853,17 @@ namespace WPF_Project___Bookstore
     //classes
     // fek konam baraye ghesmate data grid bayad field ha hame be surate property bashan --> property haro taarif kardam , baraye data grid az una estefade kon
     // kolan hameja az property estefade kon
-    interface IShow
-    {
-        void showBooklist();
-    }
-    interface IChange
-    {
-        void changePersonalInforamtion();
-    }
     public class Book
     {
+        int _id;
         string _name;
         string _author;
         string _genre;
         string _publish_no;
-        int _number;
+        bool _availability;
+        string _borrowed_username;
+        DateTime _borrow_date;
+        int _delay;
         public string Name
         {
             get { return _name; }
@@ -1678,18 +1884,72 @@ namespace WPF_Project___Bookstore
             get { return this._publish_no; }
             set { this._publish_no = value; }
         }
-        public int Number
+        public int ID
         {
-            get { return this._number; }
-            set { this._number = value; }
+            get { return this._id; }
+            set { this._id = value; }
         }
-        public Book(string name, string author, string genre, string printno, int number)
+        public bool Availability
+        {
+            get { return this._availability; }
+            set { this._availability = value; }
+        }
+        public string Borrowed_Username
+        {
+            get { return this._borrowed_username; }
+            set { this._borrowed_username = value; }
+        }
+        public DateTime Borrow_Date
+        {
+            get { return this._borrow_date; }
+            set { this._borrow_date = value; }
+        }
+        public int Delay
+        {
+            get { return this._delay; }
+            set { this._delay = value; }
+        }
+        public static void Update_Delay()
+        {
+            SqlConnection conn1 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn1.Open();
+            string command = "select * from books";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn1);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                DateTime BorTime = (DateTime)dataTable.Rows[i][7];
+                if ((bool)dataTable.Rows[i][5] == false)
+                {
+                    int del = (-1)*((BorTime.Year - (DateTime.Now.Year)) * 360 + (BorTime.Month - DateTime.Now.Month) * 30 + (BorTime.Day - DateTime.Now.Day)) - 7;
+                    string newcommand;
+                    newcommand = "update books SET delay = '" + (del) + "' where id = '" + dataTable.Rows[i][0] + "'";
+                    SqlCommand comm2 = new SqlCommand(newcommand, conn1);
+                    comm2.ExecuteNonQuery();
+                    if (del > 0)
+                    {
+                        newcommand = "update users SET unreturned = '" + true + "' where username = '" + dataTable.Rows[i][6] + "'";
+                        comm2 = new SqlCommand(newcommand, conn1);
+                        comm2.ExecuteNonQuery();
+                    }
+                }
+            }
+            SqlCommand comm1 = new SqlCommand(command, conn1);
+            comm1.ExecuteNonQuery();
+            conn1.Close();
+        }
+        public Book(int id, string name, string author, string genre, string printno,bool availability,int deley)
         {
             this._name = name;
             this._author = author;
             this._genre = genre;
             this._publish_no = printno;
-            this._number = number;
+            this._id = id;
+            this._availability = availability;
+            this._borrowed_username = "-1";
+            this._borrow_date = DateTime.Now;
+            this._delay = deley;
         }
         public Book()
         {
@@ -1701,59 +1961,25 @@ namespace WPF_Project___Bookstore
             {
                 SqlConnection conn1 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
                 conn1.Open();
-
-                //Check Exist
-                bool exist = false;
-                int num = 0;
-                string command = "select * from books";
+                //Find Last ID
+                int last_id = 1;
+                string command = "select id from books";
                 SqlDataAdapter adapter = new SqlDataAdapter(command, conn1);
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
-                for (int i = 0; i < dataTable.Rows.Count; i++)
+                if (dataTable.Rows.Count > 0)
                 {
-                    if(this._name == dataTable.Rows[i][1].ToString())
-                    {
-                        exist = true;
-                        num = int.Parse(dataTable.Rows[i][5].ToString());
-                        break;
-                    }
+                    last_id = int.Parse(dataTable.Rows[dataTable.Rows.Count - 1][0].ToString()) + 1;
                 }
                 SqlCommand comm1 = new SqlCommand(command, conn1);
                 comm1.ExecuteNonQuery();
                 conn1.Close();
-
-                if (exist)
-                {
-                    conn1.Open();
-                    command = "update books SET number = '" + (num + 1) + "' where name = '" + this._name.Trim() + "'";
-                    comm1 = new SqlCommand(command, conn1);
-                    comm1.ExecuteNonQuery();
-                    conn1.Close();
-                }
-                else
-                {
-                    //Find Last ID
-                    conn1.Open();
-                    int last_id = 1;
-                    command = "select id from books";
-                    adapter = new SqlDataAdapter(command, conn1);
-                    dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        last_id = int.Parse(dataTable.Rows[dataTable.Rows.Count - 1][0].ToString()) + 1;
-                    }
-                    comm1 = new SqlCommand(command, conn1);
-                    comm1.ExecuteNonQuery();
-                    conn1.Close();
-                    //Insert Data
-                    conn1.Open();
-                    command = "insert into books values('" + last_id + "','" + this._name.Trim() + "','" + this._author.Trim() + "','" + this._genre.Trim() + "','" + this._publish_no.Trim() + "','" + 1 + "')";
-                    comm1 = new SqlCommand(command, conn1);
-                    comm1.ExecuteNonQuery();
-                    conn1.Close();
-                }
-
+                //Insert Data
+                conn1.Open();
+                command = "insert into books values('" + last_id + "','" + this._name + "','" + this._author + "','" + this._genre + "','" + this._publish_no + "', '" + true + "', '" + (-1) + "' , '" + DateTime.Now + "', '" + 0 + "' )";
+                comm1 = new SqlCommand(command, conn1);
+                comm1.ExecuteNonQuery();
+                conn1.Close();
             }
             catch (Exception)
             {
@@ -1761,7 +1987,7 @@ namespace WPF_Project___Bookstore
             }
             return true;
         }
-        public ObservableCollection<Book> getBooks()
+        public ObservableCollection<Book> getAllBooks()
         {
             ObservableCollection<Book> Bks = new ObservableCollection<Book>();
             SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
@@ -1773,17 +1999,136 @@ namespace WPF_Project___Bookstore
             adapter.Fill(dataTable);
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
-                Bks.Add(new Book(dataTable.Rows[i][1].ToString(),
-                                      dataTable.Rows[i][2].ToString(),
-                                      dataTable.Rows[i][3].ToString(),
-                                      dataTable.Rows[i][4].ToString(),
-                                      int.Parse(dataTable.Rows[i][5].ToString())
-                                      ));
+                Bks.Add(new Book(int.Parse(dataTable.Rows[i][0].ToString()),
+                                           dataTable.Rows[i][1].ToString(),
+                                           dataTable.Rows[i][2].ToString(),
+                                           dataTable.Rows[i][3].ToString(),
+                                           dataTable.Rows[i][4].ToString(),
+                                           (bool)dataTable.Rows[i][5],
+                                           (int)dataTable.Rows[i][8]));
             }
             SqlCommand comm = new SqlCommand(command, conn);
-            comm.BeginExecuteNonQuery();
+            comm.ExecuteNonQuery();
             conn.Close();
             return Bks;
+        }
+        public ObservableCollection<Book> getBorrowedBooks()
+        {
+            ObservableCollection<Book> Bks = new ObservableCollection<Book>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from books";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if ((bool)dataTable.Rows[i][5] == false)
+                {
+                    Bks.Add(new Book(int.Parse(dataTable.Rows[i][0].ToString()),
+                                               dataTable.Rows[i][1].ToString(),
+                                               dataTable.Rows[i][2].ToString(),
+                                               dataTable.Rows[i][3].ToString(),
+                                               dataTable.Rows[i][4].ToString(),
+                                               (bool)dataTable.Rows[i][5],
+                                               (int)dataTable.Rows[i][8]));
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
+            return Bks;
+        }
+        public ObservableCollection<Book> getAvailableBooks()
+        {
+            ObservableCollection<Book> Bks = new ObservableCollection<Book>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from books";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if ((bool)dataTable.Rows[i][5] == true)
+                {
+                    Bks.Add(new Book(int.Parse(dataTable.Rows[i][0].ToString()),
+                                           dataTable.Rows[i][1].ToString(),
+                                           dataTable.Rows[i][2].ToString(),
+                                           dataTable.Rows[i][3].ToString(),
+                                           dataTable.Rows[i][4].ToString(),
+                                           (bool)dataTable.Rows[i][5],
+                                           (int)dataTable.Rows[i][8]));
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
+            return Bks;
+        }
+        public ObservableCollection<Book> getSearchedBooks(string serach)
+        {
+            ObservableCollection<Book> Bks = new ObservableCollection<Book>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from books";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if ((bool)dataTable.Rows[i][5] == true && (dataTable.Rows[i][1].ToString().ToLower() == serach.ToLower() || dataTable.Rows[i][2].ToString().ToLower() == serach.ToLower()))
+                {
+                    Bks.Add(new Book(int.Parse(dataTable.Rows[i][0].ToString()),
+                                           dataTable.Rows[i][1].ToString(),
+                                           dataTable.Rows[i][2].ToString(),
+                                           dataTable.Rows[i][3].ToString(),
+                                           dataTable.Rows[i][4].ToString(),
+                                           (bool)dataTable.Rows[i][5],
+                                           (int)dataTable.Rows[i][8]));
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
+            return Bks;
+        }
+        public void borrowSelectedBooks(List<int> books , string username)
+        {
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            for (int i = 0; i < books.Count; i++)
+            {
+                this._borrowed_username = username;
+                this._availability = false;
+                this._borrow_date = DateTime.Now;
+                this._delay = -7;
+                command = "update books SET borrowed_username = '" + username + "', availability = '" + false + "', borrow_date = '" + DateTime.Now + "', delay = '" + -7 + "' where id = '" + books[i] + "'";
+                SqlCommand comm = new SqlCommand(command, conn);
+                comm.ExecuteNonQuery();
+            }
+            conn.Close();
+        }
+        public void returnSelectedBooks(List<int> books, string username)
+        {
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            for (int i = 0; i < books.Count; i++)
+            {
+                this._borrowed_username = "-1";
+                this._availability = true;
+                this._borrow_date = DateTime.Now;
+                this._delay = 0;
+                command = "update books SET borrowed_username = '" + "-1" + "', availability = '" + true + "', borrow_date = '" + DateTime.Now + "', delay = '" + 0 + "' where id = '" + books[i] + "'";
+                SqlCommand comm = new SqlCommand(command, conn);
+                comm.ExecuteNonQuery();
+            }
+            conn.Close();
         }
     }
     public class User
@@ -1868,7 +2213,7 @@ namespace WPF_Project___Bookstore
                 //Insert Data
                 SqlConnection conn2 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
                 conn2.Open();
-                command = "insert into users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "','" + this.balance + "','" + null + "','" + null + "','" + this.registration_date + "', '" + null + "' , '" + null + "' )";
+                command = "insert into users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "','" + this.balance + "','" + null + "','" + null + "','" + this.registration_date + "', '" + null + "' , '" + null + "', '" + null + "')";
                 SqlCommand comm2 = new SqlCommand(command, conn2);
                 comm2.ExecuteNonQuery();
                 conn2.Close();
@@ -2159,6 +2504,36 @@ namespace WPF_Project___Bookstore
     }
     public class Member : User
     {
+        private bool unreturned;
+        private bool expired_license;
+        private int license_time;
+        private int license_number;
+        private int borrow_number;
+        public bool Unreturned
+        {
+            get { return this.unreturned; }
+            set { this.unreturned = value; }
+        }
+        public bool Expired_License
+        {
+            get { return this.expired_license; }
+            set { this.expired_license = value; }
+        }
+        public int License_Time
+        {
+            get { return this.license_time; }
+            set { this.license_time = value; }
+        }
+        public int License_Number
+        {
+            get { return this.license_number; }
+            set { this.license_number = value; }
+        }
+        public int Borrowed_Number
+        {
+            get { return this.borrow_number; }
+            set { this.borrow_number = value; }
+        }
         public static void Update_License_Time()
         {
             SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
@@ -2185,36 +2560,13 @@ namespace WPF_Project___Bookstore
             comm.ExecuteNonQuery();
             conn.Close();
         }
-        private bool unreturned;
-        private bool expired_license;
-        private int license_time;
-        private int license_number;
-        public bool Unreturned
-        {
-            get { return this.unreturned; }
-            set { this.unreturned = value; }
-        }
-        public bool Expired_License
-        {
-            get { return this.expired_license; }
-            set { this.expired_license = value; }
-        }
-        public int License_Time
-        {
-            get { return this.license_time; }
-            set { this.license_time = value; }
-        }
-        public int License_Number
-        {
-            get { return this.license_number; }
-            set { this.license_number = value; }
-        }
         public Member(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date)
         {
             this.unreturned = false;
             this.expired_license = false;
             this.license_time = 30;
             this.license_number = 1;
+            this.borrow_number = 0;
         }
         public Member()
         {
@@ -2275,7 +2627,7 @@ namespace WPF_Project___Bookstore
                 //Insert Data
                 SqlConnection conn2 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
                 conn2.Open();
-                command = "insert into users values('" + last_id + "','" + this.Username.Trim() + "','" + this.Email.Trim() + "','" + this.Phone_Number.Trim() + "','" + this.Password.Trim() + "','" + this.Type.Trim() + "','" + this.Balance + "','" + false + "','" + false + "','" + this.Registration_Date + "','" + 30 + "','" + 1 + "')";
+                command = "insert into users values('" + last_id + "','" + this.Username.Trim() + "','" + this.Email.Trim() + "','" + this.Phone_Number.Trim() + "','" + this.Password.Trim() + "','" + this.Type.Trim() + "','" + this.Balance + "','" + false + "','" + false + "','" + this.Registration_Date + "','" + 30 + "','" + 1 + "', '" + 0 + "')";
                 SqlCommand comm2 = new SqlCommand(command, conn2);
                 comm2.ExecuteNonQuery();
                 conn2.Close();
@@ -2312,6 +2664,7 @@ namespace WPF_Project___Bookstore
                         this.Registration_Date = (DateTime)dataTable.Rows[i][9];
                         this.License_Time = int.Parse(dataTable.Rows[i][10].ToString());
                         this.License_Number = int.Parse(dataTable.Rows[i][11].ToString());
+                        this.borrow_number = int.Parse(dataTable.Rows[i][12].ToString());
                     }
                 }
                 SqlCommand comm = new SqlCommand(command, conn);
@@ -2323,6 +2676,69 @@ namespace WPF_Project___Bookstore
                 return false;
             }
             return true;
+        }
+
+        public void editBorrowedNumber(int bn)
+        {
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            this.borrow_number = bn;
+            command = "update users SET borrowed_number = '" + bn + "' where username = '" + this.Username + "'";
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
+        }
+        public ObservableCollection<Book> getBooksWithUsername()
+        {
+            ObservableCollection<Book> BorBooks = new ObservableCollection<Book>();
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from books";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][6].ToString() == this.Username)
+                {
+                    BorBooks.Add(new Book(int.Parse(dataTable.Rows[i][0].ToString()),
+                                          dataTable.Rows[i][1].ToString(),
+                                          dataTable.Rows[i][2].ToString(),
+                                          dataTable.Rows[i][3].ToString(),
+                                          dataTable.Rows[i][4].ToString(),
+                                          (bool)dataTable.Rows[i][5],
+                                          (int)dataTable.Rows[i][8]));
+                }
+            }
+            return BorBooks;
+        }
+        public void returnBooks(int fine , List<int> returnedbooks)
+        {
+            this.Balance -= fine;
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command;
+            command = "select * from books";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            bool flagunreturned = false;
+            for(int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][6].ToString() == this.Username && (int)dataTable.Rows[i][8] > 0)
+                {
+                    flagunreturned = true;
+                }
+            }
+            SqlCommand comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            this.Unreturned = flagunreturned;
+            command = "update users SET balance = '" + this.Balance + "', unreturned = '" + this.Unreturned + "'  where username = '" + this.Username + "'";
+            comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
         }
     }
 }
