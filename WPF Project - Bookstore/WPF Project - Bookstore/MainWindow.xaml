@@ -10,11 +10,14 @@
         xmlns:materialDesign ="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" x:Class="WPF_Project___Bookstore.MainWindow"
         mc:Ignorable="d"
-        Title="User" Height="600" Width="1000" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
+        Title="User" Height="600" Width="786" WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize">
+    <Window.Resources>
+        <BitmapImage x:Key="ImageSource1" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\1.png"/>
+    </Window.Resources>
 
     <Grid>
         <Grid>
-            <TabControl x:Name="Tabs" TabStripPlacement="Left">
+            <TabControl x:Name="Tabs" TabStripPlacement="Bottom">
                 <!--Login-->
                 <TabItem x:Name="Login_Page" TabIndex="0" Header="Login">
                     <Grid>
@@ -58,14 +61,14 @@
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <Rectangle Width="450" Height="370" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
+                        <Rectangle Width="450" Height="410" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
                             </Rectangle.Effect>
                         </Rectangle>
-                        <Grid Width="450" Height="370" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid Width="450" Height="410" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="Sign Up" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
-                            <StackPanel VerticalAlignment="Center" Margin="10">
+                            <StackPanel VerticalAlignment="Top" Margin="10,30,10,0">
                                 <TextBox x:Name="RegisterUsernameBox" materialDesign:HintAssist.Hint="Username" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
                                 <TextBlock x:Name="Register_Usarname_Alert" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-10,0,0" Foreground="red" FontSize="13"/>
                                 <TextBox x:Name="RegisterEmailBox" materialDesign:HintAssist.Hint="Email" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
@@ -74,6 +77,11 @@
                                 <TextBlock x:Name="Register_PhoneNumber_Alert" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-10,0,0" Foreground="red" FontSize="13"/>
                                 <PasswordBox x:Name="RegisterPasswordBox" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,15"/>
                                 <TextBlock x:Name="Register_Password_Alert" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-10,0,0" Foreground="red" FontSize="13"/>
+                                <DockPanel Margin="0,9,0,0" HorizontalAlignment="Left">
+                                    <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="0,0,0,10">
+                                        <Button Padding="7,0,10,4" Name="btnOpenFile" Click="btnOpenFile_Click" Content="Picture"/>
+                                    </WrapPanel>
+                                </DockPanel>
                             </StackPanel>
                             <Button VerticalAlignment="Bottom" Margin="0,-15" Width="150" Cursor="Hand" Content="Sign Up" Click="Register_SignUp_Button_Click"/>
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="GreenYellow" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-15,-15" Width="39" Height="39" Cursor="Hand" Content="Login" Click="Register_SignIn_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
@@ -127,10 +135,6 @@
 
 
 
-
-
-
-
                 <!--Manager Main Menu-->
                 <TabItem x:Name="Manager_Main_Menu_Page" TabIndex="3" Header="ManagerMainMenu">
                     <Grid>
@@ -145,11 +149,11 @@
                         </Rectangle>
                         <Rectangle Width="200" Height="300" VerticalAlignment="Center" HorizontalAlignment="Left"  RadiusY="22" RadiusX="22" Margin="40,5,0,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Mang1.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -157,11 +161,11 @@
                         </Rectangle>
                         <Rectangle Width="200" Height="300" VerticalAlignment="Center" HorizontalAlignment="Center" RadiusY="22" RadiusX="22" Margin="0,5,0,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Mang2.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -169,50 +173,41 @@
                         </Rectangle>
                         <Rectangle Width="200" Height="300" VerticalAlignment="Center" HorizontalAlignment="Right" RadiusY="22" RadiusX="22" Margin="0,5,40,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Mang3.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
                             </Rectangle.Effect>
                         </Rectangle>
-                        <StackPanel Margin="0,30,0,0">
-                            <TextBlock x:Name="mang" Text="Manager Main Menu" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" Foreground="White"/>
-                        </StackPanel>
+                        <Rectangle Width="50" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" RadiusY="120" RadiusX="120" Margin="10,10,0,0">
+                            <Rectangle.Fill>
+                                <ImageBrush x:Name="AvatarAdmin"/>
+                            </Rectangle.Fill>
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="5"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+
+                        <TextBlock x:Name="mang" Text="Manager Main Menu" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="40" Foreground="White" Margin="0,40,0,0"/>
                         <Grid>
                             <Button VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
                         </Grid>
                         <Grid Width="200" Height="300" VerticalAlignment="Center" HorizontalAlignment="Left"  Margin="40,5,0,0">
-                            <TextBlock Text="Employees" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Manager_EmplpyeeButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Employees"/>
                         </Grid>
                         <Grid Width="200" Height="300" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,5,0,0">
-                            <TextBlock Text="Books" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Manager_BookButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Books"/>
                         </Grid>
                         <Grid Width="200" Height="300" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,5,40,0">
-                            <TextBlock Text="Bank" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Manager_BankAccountButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Bank"/>
                         </Grid>
-                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center"  Margin="0,0,0,35">
+                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center"  Margin="0,0,0,45">
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="39" Height="39" Cursor="Hand" Content="Exit" Click="Exit_Button_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
                         </StackPanel>
-                        <!--
-                            -->
-                        <!--images-->
-                        <!--
-                            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2">
-                                <Image Source="Books-removebg-preview.png" Height="145"/>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center">
-                                <Image Source="images/Employee-removebg-preview.png" Height="162"/>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center">
-                                <Image Source="images/Books-removebg-preview.png" Height="150"/>
-                            </StackPanel>-->
                     </Grid>
                 </TabItem>
 
@@ -421,14 +416,14 @@
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <Rectangle Width="450" Height="370" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
+                        <Rectangle Width="450" Height="410" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
                             </Rectangle.Effect>
                         </Rectangle>
-                        <Grid Width="450" Height="370" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid Width="450" Height="410" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="Add Employee" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
-                            <StackPanel VerticalAlignment="Center" Margin="10">
+                            <StackPanel VerticalAlignment="Center" Margin="10,-3,10,0">
                                 <TextBox x:Name="AddEmployee_Username" materialDesign:HintAssist.Hint="Username" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
                                 <TextBlock x:Name="AddEmployee_Usarname_Alert" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-10,0,0" Foreground="red" FontSize="13"/>
                                 <TextBox x:Name="AddEmployeeEmailBox" materialDesign:HintAssist.Hint="Email" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
@@ -437,6 +432,11 @@
                                 <TextBlock x:Name="AddEmployee_PhoneNumber_Alert" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-10,0,0" Foreground="red" FontSize="13"/>
                                 <PasswordBox x:Name="AddEmployeePasswordBox" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="0,15"/>
                                 <TextBlock x:Name="AddEmployee_Password_Alert" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,-10,0,0" Foreground="red" FontSize="13"/>
+                                <DockPanel Margin="0,9,0,0" HorizontalAlignment="Left">
+                                    <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="0,0,0,10">
+                                        <Button Padding="7,0,10,4" Name="btnOpenFile_Employee" Click="btnOpenFile_Employee_Click" Content="Picture"/>
+                                    </WrapPanel>
+                                </DockPanel>
                             </StackPanel>
                             <Button VerticalAlignment="Bottom" Margin="0,-15" Width="150" Cursor="Hand" Content="Add Employee" Click="AddEmployees_AddButton_Click"/>
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-15,-15" Width="39" Height="39" Cursor="Hand" Content="Back" Click="AddEmployees_BackButton_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
@@ -498,11 +498,11 @@
                         </Rectangle>
                         <Rectangle Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Left"  RadiusY="22" RadiusX="22" Margin="75,-210,0,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Emp1.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -510,11 +510,11 @@
                         </Rectangle>
                         <Rectangle Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Right" RadiusY="22" RadiusX="22" Margin="0,-210,75,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Emp2.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -522,11 +522,11 @@
                         </Rectangle>
                         <Rectangle Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Left" RadiusY="22" RadiusX="22" Margin="75,250,0,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Emp3.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -534,14 +534,22 @@
                         </Rectangle>
                         <Rectangle Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Right" RadiusY="22" RadiusX="22" Margin="0,250,75,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Emp4.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Rectangle Width="50" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" RadiusY="120" RadiusX="120" Margin="10,10,0,0">
+                            <Rectangle.Fill>
+                                <ImageBrush x:Name="AvatarEmployee"/>
+                            </Rectangle.Fill>
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="5"/>
                             </Rectangle.Effect>
                         </Rectangle>
                         <StackPanel Margin="0,20,0,0">
@@ -551,37 +559,20 @@
                             <Button VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
                         </Grid>
                         <Grid Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Left"  Margin="75,-210,0,0">
-                            <TextBlock Text="Members" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Employee_MembersButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Members"/>
                         </Grid>
                         <Grid Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,-210,75,0">
-                            <TextBlock Text="Books" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Employee_BookButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Books"/>
                         </Grid>
                         <Grid Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Left"  Margin="75,250,0,0">
-                            <TextBlock Text="Wallet" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Employee_BankAccountButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Wallet"/>
                         </Grid>
                         <Grid Width="280" Height="185" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,250,75,0">
-                            <TextBlock Text="Edit Information" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Employee_EditInformation_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Edit"/>
                         </Grid>
                         <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center"  Margin="0,0,0,20">
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="39" Height="39" Cursor="Hand" Content="Exit" Click="Exit_Button_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
                         </StackPanel>
-                        <!--
-                            -->
-                        <!--images-->
-                        <!--
-                            <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2">
-                                <Image Source="Books-removebg-preview.png" Height="145"/>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center">
-                                <Image Source="images/Employee-removebg-preview.png" Height="162"/>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center">
-                                <Image Source="images/Books-removebg-preview.png" Height="150"/>
-                            </StackPanel>-->
                     </Grid>
                 </TabItem>
 
@@ -639,6 +630,7 @@
                                     <ColumnDefinition Width="0.9*"/>
                                     <ColumnDefinition Width="1.3*"/>
                                     <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="0.3*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Margin="10,0,0,0" Text="Username"/>
                                 <TextBlock Grid.Column="1" Text="Email"/>
@@ -653,11 +645,13 @@
                                                     <ColumnDefinition Width="0.9*"/>
                                                     <ColumnDefinition Width="1.3*"/>
                                                     <ColumnDefinition Width="0.5*"/>
+                                                    <ColumnDefinition Width="0.3*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Border Grid.ColumnSpan="4" CornerRadius="5" BorderThickness="1" Background="LightBlue" BorderBrush="Black" Margin="6,3,22,0"/>
                                                 <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="{Binding Username}"/>
                                                 <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="{Binding Email}"/>
                                                 <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="{Binding Phone_Number}"/>
+                                                <Button Tag="{Binding Username}" Grid.Column="3" Margin="20,3,0,0" Height="10" Width="10" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" HorizontalAlignment="Left" Click="Member_Information_Click" Background="YellowGreen" IsDefault="False" mah:ControlsHelper.RecognizesAccessKey="True"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -789,6 +783,9 @@
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
                             </Rectangle.Effect>
                         </Rectangle>
+                        <Grid>
+                            <Button VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
+                        </Grid>
                         <Grid Width="450" Height="370" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="Edit Information" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <StackPanel VerticalAlignment="Center" Margin="10">
@@ -809,143 +806,114 @@
 
                 <!-- Employee Member Information Section -->
                 <TabItem x:Name="Employee_Member_Information_Section_Page" TabIndex="15" Header="Employee_MemberInformationSectuon">
-                    <Grid Background="Green">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
+                    <Grid>
+                        <Rectangle Height="800" VerticalAlignment="Top">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#2980B9"/>
+                                    <GradientStop Color="#6DD5FA" Offset="0.5"/>
+                                    <GradientStop Color="#FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle Width="450" Height="450" Margin="0,30,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White" RadiusY="22" RadiusX="22">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Rectangle Width="450" Height="110" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White">
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Grid>
+                            <Button VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
+                        </Grid>
+                        <Grid Width="450" Height="110" VerticalAlignment="Center" Margin="0,120,0,0">
+                            <Grid Margin="0,-25,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.3*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="0.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="ID"/>
+                                <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="Name"/>
+                                <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="Author"/>
+                                <TextBlock Grid.Column="3" Margin="0,2,0,0" Text="Delay" HorizontalAlignment="Center"/>
+                            </Grid>
+                            <ScrollViewer Margin="0,10,0,10" >
+                                <ItemsControl Padding="0,-50,0,0" Margin="0,-3,0,0" x:Name="Member_Books_Bindi" ItemsSource= "{Binding Books, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="450">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="0.3*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="0.5*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.ColumnSpan="4" CornerRadius="5" BorderThickness="1" Background="LightBlue" BorderBrush="Black" Margin="6,3,22,0"/>
+                                                <TextBlock Grid.Column="0" Margin="10,2,0,0" Text="{Binding ID}"/>
+                                                <TextBlock Grid.Column="1" Margin="0,2,0,0" Text="{Binding Name}"/>
+                                                <TextBlock Grid.Column="2" Margin="0,2,0,0" Text="{Binding Author}"/>
+                                                <TextBlock Grid.Column="3" Margin="0,2,0,0" Text="{Binding Delay}" HorizontalAlignment="Center"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                        <Grid Width="450" Height="450" Margin="0,30,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle Grid.ColumnSpan="2" Width="130" Margin="0,-65,0,0" Height="130" VerticalAlignment="Top" HorizontalAlignment="Center" RadiusY="100" RadiusX="100">
+                                <Rectangle.Fill>
+                                    <ImageBrush x:Name="AvatarMemberInEmployee"/>
+                                </Rectangle.Fill>
+                                <Rectangle.Effect>
+                                    <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                                </Rectangle.Effect>
+                            </Rectangle>
+                            <StackPanel Grid.Column="0" Margin="10,60,10,0">
+                                <TextBox IsReadOnly="True" x:Name="MemberUsernameBox_Employee" materialDesign:HintAssist.Hint="Username" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
+                                <TextBox IsReadOnly="True" x:Name="MemberPhoneNumberBox_Employee" materialDesign:HintAssist.Hint="Phone Number" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
+                            </StackPanel>
 
-                        <!--Header-->
-                        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
-                            <TextBlock Text="Bank Account" FontSize="30" Foreground="LightGreen"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="10,60,10,0">
+                                <TextBox IsReadOnly="True" x:Name="MemberEmailBox_Employee" materialDesign:HintAssist.Hint="Email" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
+                                <TextBox IsReadOnly="True" x:Name="MemberRegistrationDateBox_Employee" materialDesign:HintAssist.Hint="Registration Date" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,15"/>
+                            </StackPanel>
+                            <StackPanel Grid.ColumnSpan="2" VerticalAlignment="Bottom" Margin="0,0,0,35">
+                                <Border Grid.ColumnSpan="2" x:Name="Information_License_Border" BorderThickness="1" BorderBrush="Blue" Margin="0,-30,0,0" Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" Background="GreenYellow" CornerRadius="15">
+                                    <TextBlock x:Name="Information_Member_License"  Padding="10,3,10,5" Style="{StaticResource MaterialDesignButtonTextBlock}" Text="License is valid for 0 Days" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16"/>
+                                </Border>
+                                <Border Grid.ColumnSpan="2" x:Name="Information_Delay_Border" BorderThickness="1" BorderBrush="Blue" Margin="0,10,0,0" Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center" Background="GreenYellow" CornerRadius="15">
+                                    <TextBlock x:Name="Information_Member_Delay"  Padding="10,3,10,5" Style="{StaticResource MaterialDesignButtonTextBlock}" Text="Without delay" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="16"/>
+                                </Border>
+                            </StackPanel>
 
-                        <!--namayeshe mojudi-->
-                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                            <TextBlock x:Name="MemberInformation_BankAccount_BankBalance" Foreground="LightGreen"/>
-                        </StackPanel>
-
-
-                        <!--textbox-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBox x:Name="MemberInformation_BankAccount_DepositMoney_TextBox" 
-                             Background="Transparent" 
-                             BorderBrush="Transparent" 
-                             Text="Enter the amount of money you want to deposit"
-                             FontSize="20"
-                             FontWeight="Light"
-                             IsMouseCapturedChanged="MemberInformation_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged"
-                             >
-                                <TextBox.Style>
-                                    <Style TargetType="{x:Type TextBox}" >
-                                        <Setter Property="Foreground" Value="LightGreen"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBox.Style>
-                            </TextBox>
-                        </StackPanel>
-
-                        <!--border-->
-
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                            <Border x:Name="MemberInformation_BankAccountSection_DepositMoney_Border"
-                        Width="400"
-                        VerticalAlignment="Center"
-                        Background="LightGreen"
-                        Opacity="0.5"
-                        Margin="2,95"
-                        Padding="0.8"
-                        />
-                        </StackPanel>
-
-
-                        <!--Buttons-->
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top">
-                            <Button Content="Deposit"
-                        Foreground="White"
-                        Click="MemberInformation_BankAccountSection_DepositButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="DarkGreen"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
-
-                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2"  HorizontalAlignment="Center">
-                            <Button Content="Back"
-                        Foreground="White"
-                        Margin="0,30" 
-                        Click="Employee_MemberInformationSection_BackButton_Click">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#FF4C70"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border Width="100" Height="25"
-                                    CornerRadius="12"
-                                    Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-
-
+                            <Rectangle Grid.ColumnSpan="2" Visibility="Hidden" x:Name="SubmitMemberRemoveRect" RadiusX="10" RadiusY="10" Margin="0,0,0,-20" Width="300" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center" Fill="White">
+                                <Rectangle.Effect>
+                                    <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                                </Rectangle.Effect>
+                            </Rectangle>
+                            <Grid Grid.ColumnSpan="2" Visibility="Hidden" x:Name="SubmitMemberRemove" Margin="0,0,0,-20" Width="300" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <PasswordBox Grid.Column="0" Margin="10,-5,0,0" Padding="0" x:Name="RemoveMemberPasswordBox" materialDesign:HintAssist.Hint="Password" VerticalAlignment="Center" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                                <Button Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0" Height="30" Width="100" Cursor="Hand" Content="Submit" HorizontalAlignment="Right" Click="Remove_Member_Sumbmit_Click"/>
+                            </Grid>
+                            <Button x:Name="RemoveMemberButton_Name" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Margin="0,-15" Width="150" Cursor="Hand" Content="Remove" Click="MemberInformation_Remove_Click"/>
+                            <Button Grid.ColumnSpan="2" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="DeepPink" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-15,-15" Width="39" Height="39" Cursor="Hand" Content="Back" Click="Employee_MemberInformationSection_BackButton_Click" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+                            <TextBlock Grid.ColumnSpan="2" Text="" VerticalAlignment="Bottom" x:Name="Alert_Remove_Member" HorizontalAlignment="Center" Margin="0,0,0,-47" Foreground="Red" FontWeight="Bold" FontSize="14"/>
+                        </Grid>
                     </Grid>
                 </TabItem>
-
-
-
-
 
 
 
@@ -967,11 +935,11 @@
                         </Rectangle>
                         <Rectangle Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Left"  RadiusY="22" RadiusX="22" Margin="45,-205,0,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Memb1.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -979,11 +947,11 @@
                         </Rectangle>
                         <Rectangle Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Center" RadiusY="22" RadiusX="22" Margin="0,-205,0,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Memb2.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -991,11 +959,11 @@
                         </Rectangle>
                         <Rectangle Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Right" RadiusY="22" RadiusX="22" Margin="0,-205,45,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Memb3.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -1003,11 +971,11 @@
                         </Rectangle>
                         <Rectangle Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Center" RadiusY="22" RadiusX="22" Margin="0,250,240,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Memb4.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
@@ -1015,14 +983,22 @@
                         </Rectangle>
                         <Rectangle Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Center" RadiusY="22" RadiusX="22" Margin="240,250,0,0">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                    <GradientStop Color="#ffffff"/>
-                                    <GradientStop Color="#ffffff" Offset="0.5"/>
-                                    <GradientStop Color="#ffffff" Offset="1"/>
-                                </LinearGradientBrush>
+                                <ImageBrush>
+                                    <ImageBrush.ImageSource>
+                                        <BitmapImage UriSource="C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\image\Memb5.jpg"/>
+                                    </ImageBrush.ImageSource>
+                                </ImageBrush>
                             </Rectangle.Fill>
                             <Rectangle.Effect>
                                 <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="1"/>
+                            </Rectangle.Effect>
+                        </Rectangle>
+                        <Rectangle Width="50" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" RadiusY="120" RadiusX="120" Margin="10,10,0,0">
+                            <Rectangle.Fill>
+                                <ImageBrush x:Name="AvatarMember"/>
+                            </Rectangle.Fill>
+                            <Rectangle.Effect>
+                                <DropShadowEffect Color="#2980F9" Direction="0" BlurRadius="10" RenderingBias="Quality" ShadowDepth="5"/>
                             </Rectangle.Effect>
                         </Rectangle>
                         <StackPanel Margin="0,20,0,0">
@@ -1032,23 +1008,18 @@
                             <Button VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
                         </Grid>
                         <Grid Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Left"  Margin="45,-205,0,0">
-                            <TextBlock Text="Books" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Member_BooksButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Books"/>
                         </Grid>
                         <Grid Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,-205,0,0">
-                            <TextBlock Text="My Books" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Member_MyBookButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="My Books"/>
                         </Grid>
                         <Grid Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,-205,45,0">
-                            <TextBlock Text="Wallet" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Member_BankAccount_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Wallet"/>
                         </Grid>
                         <Grid Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,250,240,0">
-                            <TextBlock Text="Edit Information" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Member_EditInformation_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="Edit"/>
                         </Grid>
                         <Grid Width="210" Height="185" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="240,250,0,0">
-                            <TextBlock Text="License" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="Gray" FontSize="16"/>
                             <Button Click="Member_LicenseButton_Click" VerticalAlignment="Bottom" Margin="0,-15" Width="100" Cursor="Hand" Content="License"/>
                         </Grid>
                         <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center"  Margin="0,0,0,20">
@@ -1093,7 +1064,7 @@
                         <Grid>
                             <Button Click="Manager_EmplpyeeButton_Click" VerticalAlignment="Bottom" Margin="0,0,0,0" Width="0" Cursor="Hand"/>
                         </Grid>
-                        
+
                         <StackPanel VerticalAlignment="Bottom" Margin="0,0,0,10">
                             <TextBlock x:Name="Borrow_Alert" Text="" VerticalAlignment="Bottom" HorizontalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="14"/>
                         </StackPanel>
@@ -1344,9 +1315,16 @@
                         </Grid>
                     </Grid>
                 </TabItem>
-
-
             </TabControl>
+			
+			
+			
+			
+			
+			
+			
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,7,5,0" Width="22" Height="22" Cursor="Hand" Content="X" Click="Exit_App" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="LightSkyBlue" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,7,30,0" Width="22" Height="22" Cursor="Hand" Content="-" Click="Minimize_App" Foreground="Black" FontFamily="Comic Sans MS" FontWeight="Bold"/>
         </Grid>
     </Grid>
 </Window>

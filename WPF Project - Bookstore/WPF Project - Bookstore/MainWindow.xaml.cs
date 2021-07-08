@@ -1,4 +1,4 @@
-﻿using System;
+﻿ousing System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -17,18 +17,23 @@ using System.Windows.Shapes;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 
 namespace WPF_Project___Bookstore
 {
     enum Types { Admin = 1, Employee, Member, NotFound, NotMatched, Bug }
-    // tu tab item Bank Account ye jayi hast ke bayad mojudi ro be karbar neshun bedi ---> zamani k tab item dare initialize mishe un textblock ro meghdar dehi kon
-    // (barat tu front comment gozashtam balash neveshtam "namayeshe mojudi"  Esme TextBlock : Manager_BankAccount_BankBalance  )
-    // har ja dari tab iteme bank accounto baz mikoni ---> Manager_BankAccount_BankBalance.Text ro mosavie mojudi gharar bede 
+
+    /// <summary>
+    /// 1)Database Connection
+    /// 2)Image Sources
+    /// </summary>
     public partial class MainWindow : Window
     {
         //Temps
+        string path;
         string temp_username, temp_email, temp_phone_number, temp_password;
+        string temp_img_path = "";
         Types Access = Types.NotFound;
         Manager TempManager;
         Employee TempEmployee;
@@ -42,19 +47,35 @@ namespace WPF_Project___Bookstore
         public ObservableCollection<Employee> Employees { get; set; } = new ObservableCollection<Employee>();
         public ObservableCollection<Member> Members { get; set; } = new ObservableCollection<Member>();
         public ObservableCollection<Book> Books { get; set; } = new ObservableCollection<Book>();
+
+
+
+        public ImageSource Source { get; set; }
+
+
+
+        //Main
         public MainWindow()
         {
             //Updates
             Member.Update_License_Time();
             Book.Update_Delay();
-            //
+            //Initialize
             InitializeComponent();
             foreach (TabItem tab in Tabs.Items)
             {
-                //tab.Header = null;
-                //tab.Visibility = Visibility.Hidden;
+                tab.Header = null;
+                tab.Visibility = Visibility.Collapsed;
             }
         }
+
+
+
+
+
+
+
+
 
         //Database Functions
         private Types usernameAvailableAndMatch(string u, string p)
@@ -268,7 +289,12 @@ namespace WPF_Project___Bookstore
         }
 
 
-        // login page :
+
+
+
+
+
+        //Login page :
         private void Login_SignIn_Button_Click(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -316,11 +342,17 @@ namespace WPF_Project___Bookstore
 
                             DataContext = this;
                             Manager_Balance.Text = "Balance : " + TempManager.Balance + " T";
+
+                            path = Directory.GetCurrentDirectory();
+                            path += @"\image\";
+                            path += TempManager.Img_Path;
+                            AvatarAdmin.ImageSource = new BitmapImage(new Uri(path));
                             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Main_Menu_Page));
 
-                            
+
                             break;
                         case Types.Employee:
+
                             Access = Types.Employee;
                             TempEmployee = new Employee();
                             TempBook = new Book();
@@ -334,9 +366,6 @@ namespace WPF_Project___Bookstore
 
                             Members = TempEmployee.getUnreturned();
                             Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
-
-                            Books = TempBook.getBorrowedBooks();
-                            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
                             DataContext = this;
 
@@ -358,11 +387,16 @@ namespace WPF_Project___Bookstore
 
 
 
-
+                            path = Directory.GetCurrentDirectory();
+                            path += @"\image\";
+                            path += TempEmployee.Img_Path;
+                            AvatarEmployee.ImageSource = new BitmapImage(new Uri(path));
 
 
 
                             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
+
+
                             break;
                         case Types.Member:
                             Access = Types.Member;
@@ -393,9 +427,14 @@ namespace WPF_Project___Bookstore
                             else
                             {
                                 License_Border.Background = Brushes.OrangeRed.Clone();
-                                Member_License.Text = "Your license has expired for " + (-1)*TempMember.License_Time + " days";
+                                Member_License.Text = "Your license has expired for " + (-1) * TempMember.License_Time + " days";
                             }
 
+
+                            path = Directory.GetCurrentDirectory();
+                            path += @"\image\";
+                            path += TempMember.Img_Path;
+                            AvatarMember.ImageSource = new BitmapImage(new Uri(path));
 
                             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Main_Menu_Page));
                             break;
@@ -447,7 +486,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // register page :
+        //Register page :
         private void Register_SignUp_Button_Click(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -524,9 +563,9 @@ namespace WPF_Project___Bookstore
                 Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Payment_Page));
             }
         }
-
         private void Register_SignIn_Click(object sender, RoutedEventArgs e)
         {
+            temp_img_path = "";
             Register_Usarname_Alert.Text = "";
             Register_Email_Alert.Text = "";
             Register_PhoneNumber_Alert.Text = "";
@@ -536,6 +575,14 @@ namespace WPF_Project___Bookstore
             RegisterPhoneNumberBox.Text = "";
             RegisterPasswordBox.Password = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Login_Page));
+        }
+        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                temp_img_path = openFileDialog.FileName;
+            }
         }
 
 
@@ -551,7 +598,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // payment page :
+        //Payment page :
         private void Payment_PayButton_Click(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -616,7 +663,27 @@ namespace WPF_Project___Bookstore
                 }
                 if (Access == Types.NotFound)
                 {
-                    TempMember = new Member(temp_username.ToLower(), temp_email.ToLower(), temp_phone_number, temp_password, "member", 0, DateTime.Now);
+                    string imagename = "";
+                    if (temp_img_path == "")
+                    {
+                        imagename = "1.png";
+                    }
+                    else
+                    {
+                        imagename += temp_username.ToLower() + ".png";
+                    }
+                    TempMember = new Member(temp_username.ToLower(), temp_email.ToLower(), temp_phone_number, temp_password, "member", 0, DateTime.Now, imagename);
+                    if (temp_img_path != "")
+                    {
+                        string destination_path = Directory.GetCurrentDirectory();
+                        destination_path += @"\image\";
+                        destination_path += imagename;
+                        File.Copy(temp_img_path, destination_path, true);
+                    }
+                    path = Directory.GetCurrentDirectory();
+                    path += @"\image\";
+                    path += TempMember.Img_Path;
+                    AvatarMember.ImageSource = new BitmapImage(new Uri(path));
                     if (TempMember.fillDatabase())
                     {
                         Access = Types.Member;
@@ -658,6 +725,7 @@ namespace WPF_Project___Bookstore
         }
         private void Payment_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            temp_img_path = "";
             Payment_CardNumber_Alert.Text = "";
             Payment_CVV_Alert.Text = "";
             Payment_Month_Alert.Text = "";
@@ -685,18 +753,15 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Manager Main Menu Page :
-
+        //Manager Main Menu Page :
         private void Manager_EmplpyeeButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Employee_Section_List_Page));
         }
-
         private void Manager_BookButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Books_Sections_List_Page));
         }
-
         private void Manager_BankAccountButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Bank_Account_Section_Page));
@@ -707,7 +772,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Manager Employee Section :
+        //Manager Employee Section :
         private void Manager_EmployeeSection_ListSection_AddButton_Click(object sender, RoutedEventArgs e)
         {
             Remove_All_Selected_Employee_Button.Visibility = Visibility.Hidden;
@@ -721,7 +786,6 @@ namespace WPF_Project___Bookstore
             PayEmployeePasswordBox.Password = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Add_Employee_Menu_Page));
         }
-
         private void Manager_EmployeeSection_ListSection_PayButton_Click(object sender, RoutedEventArgs e)
         {
             PayEmployeeButton.Visibility = Visibility.Hidden;
@@ -816,8 +880,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Manager Book Section :
-
+        //Manager Book Section :
         private void Manager_BooksSection_AddButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Add_Book_Menu_Page));
@@ -833,7 +896,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // manager bank acconut section :
+        //manager bank acconut section :
         private void Manager_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -861,8 +924,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Manager Add Employee Section :
-
+        //Manager Add Employee Section :
         private void AddEmployees_AddButton_Click(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -929,7 +991,23 @@ namespace WPF_Project___Bookstore
             }
             if (flag)
             {
-                TempEmployee = new Employee(AddEmployee_Username.Text.ToLower(), AddEmployeeEmailBox.Text.ToLower(), AddEmployeePhoneNumberBox.Text, AddEmployeePasswordBox.Password, "employee", 0, DateTime.Now);
+                string imagename = "";
+                if (temp_img_path == "")
+                {
+                    imagename = "1.png";
+                }
+                else
+                {
+                    imagename += AddEmployee_Username.Text.ToLower() + ".png";
+                }
+                TempEmployee = new Employee(AddEmployee_Username.Text.ToLower(), AddEmployeeEmailBox.Text.ToLower(), AddEmployeePhoneNumberBox.Text, AddEmployeePasswordBox.Password, "employee", 0, DateTime.Now, imagename);
+                if (temp_img_path != "")
+                {
+                    string destination_path = Directory.GetCurrentDirectory();
+                    destination_path += @"\image\";
+                    destination_path += imagename;
+                    File.Copy(temp_img_path, destination_path, true);
+                }
                 TempEmployee.fillDatabase();
                 TempEmployee = null;
                 Employees = TempManager.getEmployees();
@@ -945,6 +1023,7 @@ namespace WPF_Project___Bookstore
         }
         private void AddEmployees_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            temp_img_path = "";
             AddEmployee_Usarname_Alert.Text = "";
             AddEmployee_Email_Alert.Text = "";
             AddEmployee_PhoneNumber_Alert.Text = "";
@@ -955,13 +1034,21 @@ namespace WPF_Project___Bookstore
             AddEmployeePasswordBox.Password = "";
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Manager_Employee_Section_List_Page));
         }
+        private void btnOpenFile_Employee_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                temp_img_path = openFileDialog.FileName;
+            }
+        }
 
 
 
 
 
 
-        // Manager Add Books Section :
+        //Manager Add Books Section :
         private void AddBooks_AddButton_Click(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -1045,17 +1132,17 @@ namespace WPF_Project___Bookstore
 
 
         //Employee Main Menu Page :
-
         private void Employee_MembersButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Member_Section_List_Page));
         }
-
         private void Employee_BookButton_Click(object sender, RoutedEventArgs e)
         {
+            Books = TempBook.getBorrowedBooks();
+            Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Books_Section_List_Page));
         }
-
         private void Employee_BankAccountButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Bank_Account_Section_Page));
@@ -1139,6 +1226,57 @@ namespace WPF_Project___Bookstore
             DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
         }
+        private void Member_Information_Click(object sender, RoutedEventArgs e)
+        {
+            AllMembButton.Visibility = Visibility.Visible;
+            UnreturnedMembButton.Visibility = Visibility.Visible;
+            ExpiredLicenseMembButton.Visibility = Visibility.Visible;
+            MemberInfoRect.Visibility = Visibility.Hidden;
+            MemberInfo.Visibility = Visibility.Hidden;
+            MembList.Text = "Unreturned";
+            TempMember = new Member();
+            TempMember.fillUserWith(((Button)sender).Tag.ToString());
+            //Avatar
+            path = Directory.GetCurrentDirectory();
+            path += @"\image\";
+            path += TempMember.Img_Path;
+            AvatarMemberInEmployee.ImageSource = new BitmapImage(new Uri(path));
+            //Fill Information Page
+            MemberUsernameBox_Employee.Text = TempMember.Username;
+            MemberEmailBox_Employee.Text = TempMember.Email;
+            MemberPhoneNumberBox_Employee.Text = TempMember.Phone_Number;
+            MemberRegistrationDateBox_Employee.Text = TempMember.Registration_Date.ToString();
+            if (TempMember.Expired_License)
+            {
+                Information_License_Border.Background = Brushes.Red.Clone();
+                Information_Member_License.Text = "License has expired for " + ((-1) * TempMember.License_Time) + " days";
+            }
+            else
+            {
+                Information_License_Border.Background = Brushes.GreenYellow.Clone();
+                Information_Member_License.Text = "License is valid for " + TempMember.License_Time + " Days";
+            }
+            if (TempMember.Unreturned)
+            {
+                Information_Delay_Border.Background = Brushes.Red.Clone();
+                Information_Member_Delay.Text = "Delayed";
+            }
+            else
+            {
+                Information_Delay_Border.Background = Brushes.GreenYellow.Clone();
+                Information_Member_Delay.Text = "Without delay";
+            }
+
+            Books = TempMember.getBooksWithUsername();
+            Member_Books_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+
+
+            Members = TempEmployee.getUnreturned();
+            Member_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+            Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Member_Information_Section_Page));
+        }
+        
 
 
 
@@ -1151,8 +1289,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Employee Book Section : 
-
+        //Employee Book Section : 
         private void Employee_All_Books(object sender, RoutedEventArgs e)
         {
             qwer2.Text = "All Books";
@@ -1177,7 +1314,7 @@ namespace WPF_Project___Bookstore
         private void Employee_BooksSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
             qwer2.Text = "Borrowed Books";
-            Books = TempBook.getBorrowedBooks();
+            Books = null;
             Bindi_Books_Employee.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
             DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
@@ -1189,7 +1326,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Employee Wallet section : 
+        //Employee Wallet section : 
         private void Employee_BankAccountSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Main_Menu_Page));
@@ -1203,7 +1340,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Employee Edit acconut section :
+        //Employee Edit acconut section :
         private void Employee_Edit_Information_Button(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -1279,17 +1416,71 @@ namespace WPF_Project___Bookstore
 
 
 
-        //Member Information section :
-        private void MemberInformation_BankAccount_DepositMoney_TextBox_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
+        //Employee Member Information section :
 
+        private void MemberInformation_Remove_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveMemberButton_Name.Visibility = Visibility.Hidden;
+            SubmitMemberRemoveRect.Visibility = Visibility.Visible;
+            SubmitMemberRemove.Visibility = Visibility.Visible;
         }
-        private void MemberInformation_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
+        private void Remove_Member_Sumbmit_Click(object sender, RoutedEventArgs e)
         {
-
+            if (TempEmployee.Password == RemoveMemberPasswordBox.Password)
+            {
+                if (TempMember != null)
+                {
+                    TempMember.removeThis();
+                    TempMember = null;
+                    RemoveMemberButton_Name.Visibility = Visibility.Visible;
+                    SubmitMemberRemoveRect.Visibility = Visibility.Hidden;
+                    SubmitMemberRemove.Visibility = Visibility.Hidden;
+                    Alert_Remove_Member.Foreground = Brushes.Green;
+                    Alert_Remove_Member.Text = "Member removed successfully!";
+                    RemoveMemberPasswordBox.Password = "";
+                    Books = null;
+                    Member_Books_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+                    DataContext = this;
+                    MemberUsernameBox_Employee.Text = "";
+                    MemberEmailBox_Employee.Text = "";
+                    MemberPhoneNumberBox_Employee.Text = "";
+                    MemberRegistrationDateBox_Employee.Text = "";
+                    Information_License_Border.Background = Brushes.GreenYellow.Clone();
+                    Information_Member_License.Text = "License is valid for " + 0 + " Days";
+                    Information_Delay_Border.Background = Brushes.GreenYellow.Clone();
+                    Information_Member_Delay.Text = "Without delay";
+                }
+                else
+                {
+                    Alert_Remove_Member.Foreground = Brushes.Red;
+                    Alert_Remove_Member.Text = "The member has already been removed!";
+                }
+            }
+            else
+            {
+                Alert_Remove_Member.Foreground = Brushes.Red;
+                Alert_Remove_Member.Text = "Password is wrong!";
+            }
         }
         private void Employee_MemberInformationSection_BackButton_Click(object sender, RoutedEventArgs e)
         {
+            RemoveMemberButton_Name.Visibility = Visibility.Visible;
+            SubmitMemberRemoveRect.Visibility = Visibility.Hidden;
+            SubmitMemberRemove.Visibility = Visibility.Hidden;
+            MemberUsernameBox_Employee.Text = "";
+            MemberEmailBox_Employee.Text = "";
+            MemberPhoneNumberBox_Employee.Text = "";
+            MemberRegistrationDateBox_Employee.Text = "";
+            Alert_Remove_Member.Text = "";
+            RemoveMemberPasswordBox.Password = "";
+            Information_License_Border.Background = Brushes.GreenYellow.Clone();
+            Information_Member_License.Text = "License is valid for " + 0 + " Days";
+            Information_Delay_Border.Background = Brushes.GreenYellow.Clone();
+            Information_Member_Delay.Text = "Without delay";
+            Books = null;
+            Member_Books_Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            DataContext = this;
+            AvatarMemberInEmployee.ImageSource = null;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Employee_Member_Section_List_Page));
         }
 
@@ -1309,50 +1500,7 @@ namespace WPF_Project___Bookstore
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //Member Main Menu Page :
-
         private void Member_BooksButton_Click(object sender, RoutedEventArgs e)
         {
             Books = TempBook.getAvailableBooks();
@@ -1360,7 +1508,6 @@ namespace WPF_Project___Bookstore
             DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_Books_Section_List_Page));
         }
-
         private void Member_MyBookButton_Click(object sender, RoutedEventArgs e)
         {
             Books = TempMember.getBooksWithUsername();
@@ -1368,7 +1515,6 @@ namespace WPF_Project___Bookstore
             DataContext = this;
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_MyBooks_Section_List_Page));
         }
-
         private void Member_LicenseButton_Click(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Member_License_Section_Page));
@@ -1484,7 +1630,7 @@ namespace WPF_Project___Bookstore
         }
         private void Borrow_Books_Click2(object sender, RoutedEventArgs e)
         {
-            if(TempMember.License_Time < 7)
+            if (TempMember.License_Time < 7)
             {
                 Borrow_Alert.Foreground = Brushes.Red;
                 Borrow_Alert.Text = "Your license has expired or is about to expire!";
@@ -1501,7 +1647,7 @@ namespace WPF_Project___Bookstore
             TempMember.editBorrowedNumber(TempMember.Borrowed_Number + BorrowedBooks.Count);
             TempBook.borrowSelectedBooks(BorrowedBooks, TempMember.Username);
             BorrowedBooks = new List<int>();
-            if(BookSearchRect.Visibility == Visibility.Visible)
+            if (BookSearchRect.Visibility == Visibility.Visible)
             {
                 Books = TempBook.getSearchedBooks(TempSearchBook);
             }
@@ -1524,7 +1670,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Member MyBooks Section :
+        //Member MyBooks Section :
         private void Return_Book_Click(object sender, RoutedEventArgs e)
         {
             Return_Alert.Text = "";
@@ -1537,10 +1683,6 @@ namespace WPF_Project___Bookstore
                     ((Button)sender).Background = Brushes.DeepPink.Clone();
                     ReturnedBooks.Add((int)((Button)sender).Tag);
                     Return_All_Selected_Books_Button.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    //Borrow_Alert.Text = "You can't borrow more than 5 books!";
                 }
             }
             else
@@ -1558,9 +1700,9 @@ namespace WPF_Project___Bookstore
         private void Return_Books_Click2(object sender, RoutedEventArgs e)
         {
             int sum = 0;
-            for(int i = 0; i < ReturnedBooks.Count; i++)
+            for (int i = 0; i < ReturnedBooks.Count; i++)
             {
-                for(int j = 0; j < Books.Count; j++)
+                for (int j = 0; j < Books.Count; j++)
                 {
                     if (ReturnedBooks[i] == Books[j].ID)
                     {
@@ -1576,7 +1718,7 @@ namespace WPF_Project___Bookstore
             {
 
                 Return_Alert.Foreground = Brushes.Green;
-                Return_Alert.Text = "The books were returned and you were fined " + sum +" T";
+                Return_Alert.Text = "The books were returned and you were fined " + sum + " T";
                 TempBook.returnSelectedBooks(ReturnedBooks, TempMember.Username);
                 TempMember.editBorrowedNumber(TempMember.Borrowed_Number - ReturnedBooks.Count);
                 TempMember.returnBooks(sum, ReturnedBooks);
@@ -1610,7 +1752,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Member License section :
+        //Member License section :
         private void Member_License_Renew_Click(object sender, RoutedEventArgs e)
         {
             if (TempMember.Balance >= 100)
@@ -1651,7 +1793,7 @@ namespace WPF_Project___Bookstore
 
 
 
-        // Member Bank Account section : 
+        //Member Bank Account section : 
         private void Member_BankAccountSection_DepositButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1680,8 +1822,7 @@ namespace WPF_Project___Bookstore
 
 
 
-
-        // Member Edit information section : 
+        //Member Edit information section : 
         private void Member_Edit_Information_Button(object sender, RoutedEventArgs e)
         {
             bool flag = true;
@@ -1770,12 +1911,13 @@ namespace WPF_Project___Bookstore
             TempBook = null;
             TempDeposit = 0;
             TempSearchBook = "";
+            temp_img_path = "";
             List<string> RemoveEmployees = new List<string>();
             List<int> BorrowedBooks = new List<int>();
             List<int> ReturnedBooks = new List<int>();
 
-        //Empty Tables
-        Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+            //Empty Tables
+            Bindi.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
             Bindi_Books.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
 
@@ -1805,7 +1947,23 @@ namespace WPF_Project___Bookstore
             MemberEditPhoneNumberBox.Text = "";
             MemberEditPasswordBox.Password = "";
 
+
+            AvatarAdmin.ImageSource = null;
+            AvatarEmployee.ImageSource = null;
+            AvatarMember.ImageSource = null;
+
             Dispatcher.BeginInvoke((Action)(() => Tabs.SelectedItem = Login_Page));
+        }
+
+
+        //Exit & Minimize
+        private void Exit_App(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        private void Minimize_App(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
         }
     }
 
@@ -1819,40 +1977,7 @@ namespace WPF_Project___Bookstore
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //classes
-    // fek konam baraye ghesmate data grid bayad field ha hame be surate property bashan --> property haro taarif kardam , baraye data grid az una estefade kon
-    // kolan hameja az property estefade kon
+    //Classes
     public class Book
     {
         int _id;
@@ -2140,6 +2265,7 @@ namespace WPF_Project___Bookstore
         private string type;
         private int balance;
         private DateTime registration_date;
+        private string img_path;
         public string Username
         {
             get { return this.username; }
@@ -2175,7 +2301,12 @@ namespace WPF_Project___Bookstore
             get { return this.registration_date; }
             set { this.registration_date = value; }
         }
-        public User(string username, string emailAddress, string telephonenumber, string password, string type , int balance , DateTime registration_date)
+        public string Img_Path
+        {
+            get { return this.img_path; }
+            set { this.img_path = value; }
+        }
+        public User(string username, string emailAddress, string telephonenumber, string password, string type , int balance , DateTime registration_date, string imgpath)
         {
             this.username = username;
             this.email = emailAddress;
@@ -2184,6 +2315,7 @@ namespace WPF_Project___Bookstore
             this.type = type;
             this.balance = balance;
             this.registration_date = registration_date;
+            this.img_path = imgpath;
         }
         public User()
         {
@@ -2213,7 +2345,7 @@ namespace WPF_Project___Bookstore
                 //Insert Data
                 SqlConnection conn2 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
                 conn2.Open();
-                command = "insert into users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "','" + this.balance + "','" + null + "','" + null + "','" + this.registration_date + "', '" + null + "' , '" + null + "', '" + null + "')";
+                command = "insert into users values('" + last_id + "','" + this.username.Trim() + "','" + this.email.Trim() + "','" + this.phone_number.Trim() + "','" + this.password.Trim() + "','" + type.Trim() + "','" + this.balance + "','" + null + "','" + null + "','" + this.registration_date + "', '" + null + "' , '" + null + "', '" + null + "','" + this.Img_Path + "')";
                 SqlCommand comm2 = new SqlCommand(command, conn2);
                 comm2.ExecuteNonQuery();
                 conn2.Close();
@@ -2246,6 +2378,7 @@ namespace WPF_Project___Bookstore
                         this.type = dataTable.Rows[i][5].ToString();
                         this.balance = int.Parse(dataTable.Rows[i][6].ToString());
                         this.registration_date = (DateTime)dataTable.Rows[i][9];
+                        this.img_path = dataTable.Rows[i][13].ToString();
                     }
                 }
                 SqlCommand comm = new SqlCommand(command, conn);
@@ -2262,7 +2395,7 @@ namespace WPF_Project___Bookstore
     public class Manager : User
     {
 
-        public Manager(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date)
+        public Manager(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date, string imgpath) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date, imgpath)
         {
 
         }
@@ -2290,7 +2423,8 @@ namespace WPF_Project___Bookstore
                                           dataTable.Rows[i][4].ToString(),
                                           dataTable.Rows[i][5].ToString(),
                                           int.Parse(dataTable.Rows[i][6].ToString()),
-                                          (DateTime)dataTable.Rows[i][9]));
+                                          (DateTime)dataTable.Rows[i][9],
+                                          dataTable.Rows[i][13].ToString()));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2368,7 +2502,7 @@ namespace WPF_Project___Bookstore
     }
     public class Employee : User
     {
-        public Employee(string username, string emailAddress, string telephonenumber, string password, string type, int balance , DateTime registration_date) : base(username, emailAddress, telephonenumber, password, type, balance , registration_date)
+        public Employee(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date, string imgpath) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date, imgpath)
         {
 
         }
@@ -2396,7 +2530,8 @@ namespace WPF_Project___Bookstore
                                           dataTable.Rows[i][4].ToString(),
                                           dataTable.Rows[i][5].ToString(),
                                           int.Parse(dataTable.Rows[i][6].ToString()),
-                                          (DateTime)dataTable.Rows[i][9]));
+                                          (DateTime)dataTable.Rows[i][9],
+                                          dataTable.Rows[i][13].ToString()));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2425,7 +2560,8 @@ namespace WPF_Project___Bookstore
                                           dataTable.Rows[i][4].ToString(),
                                           dataTable.Rows[i][5].ToString(),
                                           int.Parse(dataTable.Rows[i][6].ToString()),
-                                          (DateTime)dataTable.Rows[i][9]));
+                                          (DateTime)dataTable.Rows[i][9],
+                                          dataTable.Rows[i][13].ToString()));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2454,7 +2590,8 @@ namespace WPF_Project___Bookstore
                                               dataTable.Rows[i][4].ToString(),
                                               dataTable.Rows[i][5].ToString(),
                                               int.Parse(dataTable.Rows[i][6].ToString()),
-                                              (DateTime)dataTable.Rows[i][9]));
+                                              (DateTime)dataTable.Rows[i][9],
+                                              dataTable.Rows[i][13].ToString()));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2483,7 +2620,8 @@ namespace WPF_Project___Bookstore
                                               dataTable.Rows[i][4].ToString(),
                                               dataTable.Rows[i][5].ToString(),
                                               int.Parse(dataTable.Rows[i][6].ToString()),
-                                              (DateTime)dataTable.Rows[i][9]));
+                                              (DateTime)dataTable.Rows[i][9],
+                                              dataTable.Rows[i][13].ToString()));
                 }
             }
             SqlCommand comm = new SqlCommand(command, conn);
@@ -2560,7 +2698,7 @@ namespace WPF_Project___Bookstore
             comm.ExecuteNonQuery();
             conn.Close();
         }
-        public Member(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date)
+        public Member(string username, string emailAddress, string telephonenumber, string password, string type, int balance, DateTime registration_date, string imgpath) : base(username, emailAddress, telephonenumber, password, type, balance, registration_date, imgpath)
         {
             this.unreturned = false;
             this.expired_license = false;
@@ -2627,7 +2765,7 @@ namespace WPF_Project___Bookstore
                 //Insert Data
                 SqlConnection conn2 = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
                 conn2.Open();
-                command = "insert into users values('" + last_id + "','" + this.Username.Trim() + "','" + this.Email.Trim() + "','" + this.Phone_Number.Trim() + "','" + this.Password.Trim() + "','" + this.Type.Trim() + "','" + this.Balance + "','" + false + "','" + false + "','" + this.Registration_Date + "','" + 30 + "','" + 1 + "', '" + 0 + "')";
+                command = "insert into users values('" + last_id + "','" + this.Username.Trim() + "','" + this.Email.Trim() + "','" + this.Phone_Number.Trim() + "','" + this.Password.Trim() + "','" + this.Type.Trim() + "','" + this.Balance + "','" + false + "','" + false + "','" + this.Registration_Date + "','" + 30 + "','" + 1 + "', '" + 0 + "','" + this.Img_Path.ToString() + "')";
                 SqlCommand comm2 = new SqlCommand(command, conn2);
                 comm2.ExecuteNonQuery();
                 conn2.Close();
@@ -2665,6 +2803,7 @@ namespace WPF_Project___Bookstore
                         this.License_Time = int.Parse(dataTable.Rows[i][10].ToString());
                         this.License_Number = int.Parse(dataTable.Rows[i][11].ToString());
                         this.borrow_number = int.Parse(dataTable.Rows[i][12].ToString());
+                        this.Img_Path = dataTable.Rows[i][13].ToString();
                     }
                 }
                 SqlCommand comm = new SqlCommand(command, conn);
@@ -2737,6 +2876,31 @@ namespace WPF_Project___Bookstore
             this.Unreturned = flagunreturned;
             command = "update users SET balance = '" + this.Balance + "', unreturned = '" + this.Unreturned + "'  where username = '" + this.Username + "'";
             comm = new SqlCommand(command, conn);
+            comm.ExecuteNonQuery();
+            conn.Close();
+        }
+        public void removeThis()
+        {
+            SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\DB\RRDB.mdf;Integrated Security=True;Connect Timeout=30");
+            conn.Open();
+            string command = "select * from books";
+            SqlDataAdapter adapter = new SqlDataAdapter(command, conn);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (dataTable.Rows[i][6].ToString() == this.Username)
+                {
+                    string newcommand;
+                    newcommand = "update books SET delay = '" + 0 + "', borrowed_username = '" + (-1) + "' , availability = '" + true + "' where id = '" + dataTable.Rows[i][0] + "'";
+                    SqlCommand comm2 = new SqlCommand(newcommand, conn);
+                    comm2.ExecuteNonQuery();
+                }
+            }
+            SqlCommand comm1 = new SqlCommand(command, conn);
+            comm1.ExecuteNonQuery();
+            command = "delete from users where username = '" + this.Username + "' ";
+            SqlCommand comm = new SqlCommand(command, conn);
             comm.ExecuteNonQuery();
             conn.Close();
         }
