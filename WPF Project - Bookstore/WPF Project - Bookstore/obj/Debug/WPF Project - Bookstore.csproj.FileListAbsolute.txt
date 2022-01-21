@@ -1,0 +1,5 @@
+D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csprojAssemblyReference.cache
+D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\App.g.cs
+D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.cache
+D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\MainWindow.g.cs
+D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.lref
