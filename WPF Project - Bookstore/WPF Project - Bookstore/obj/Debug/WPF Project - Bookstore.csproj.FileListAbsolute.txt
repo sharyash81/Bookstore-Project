@@ -3,3 +3,68 @@ D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\App
 D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.cache
 D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\MainWindow.g.cs
 D:\wpf project\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.lref
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csprojAssemblyReference.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\MainWindow.g.cs
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\App.g.cs
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore_MarkupCompile.lref
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\WPF Project - Bookstore.exe.config
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\WPF Project - Bookstore.exe
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\WPF Project - Bookstore.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\DotNetProjects.Wpf.Extended.Toolkit.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.IconPacks.Core.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.IconPacks.Material.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Microsoft.Toolkit.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Syncfusion.Data.WPF.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Syncfusion.Licensing.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Syncfusion.SfGrid.WPF.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Syncfusion.Shared.WPF.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Xceed.Wpf.AvalonDock.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Aero.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Metro.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Xceed.Wpf.AvalonDock.Themes.VS2010.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Xceed.Wpf.Toolkit.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.IconPacks.Core.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.IconPacks.Core.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.IconPacks.Material.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.IconPacks.Material.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Microsoft.Toolkit.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Microsoft.Toolkit.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Syncfusion.Data.WPF.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Syncfusion.SfGrid.WPF.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Syncfusion.Shared.WPF.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\cs-CZ\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\de\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\es\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\fr\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\hu\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\it\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\ja-JP\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\pt-BR\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\ro\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\MainWindow.baml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.g.resources
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF_Project___Bookstore.Properties.Resources.resources
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csproj.GenerateResource.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csproj.CoreCompileInputs.cache
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.csproj.CopyComplete
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.exe
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\WPF Project - Bookstore.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\ControlzEx.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MaterialDesignColors.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MaterialDesignThemes.Wpf.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Microsoft.Xaml.Behaviors.dll
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\ControlzEx.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\ControlzEx.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MahApps.Metro.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MaterialDesignColors.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MaterialDesignThemes.Wpf.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\MaterialDesignThemes.Wpf.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Microsoft.Xaml.Behaviors.pdb
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\bin\Debug\Microsoft.Xaml.Behaviors.xml
+C:\Users\ArmanS\Desktop\WPF\WPF Project - Bookstore\WPF Project - Bookstore\obj\Debug\App.baml
